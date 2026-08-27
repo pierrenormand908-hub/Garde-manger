@@ -115,7 +115,7 @@
         </div>
     </div>
 
-    <!-- Modal d'édition (crayon) d'une catégorie -->
+    <!-- Fenêtre d'édition de la catégorie (Crayon ✏️) incluant les polices -->
     <div id="editCategoryModal" class="modal">
         <div class="modal-content">
             <h3>✏️ Modifier la catégorie</h3>
@@ -130,6 +130,7 @@
         </div>
     </div>
 
+    <!-- Paramètres généraux (épurés, sans les polices) -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <h3>⚙️ Paramètres & Apparence</h3>
@@ -258,7 +259,7 @@
                     cat.items.forEach((it,i)=>{if(it.name.toLowerCase().includes(q)||cm){f=true;itemH+=`<li class="item-row"><div class="item-left"><span class="item-badge" style="color:${itemTextCol}; font-family:${catFont}; font-size:${catSize};" title="${it.name}">${it.name}</span></div><div class="item-right-controls"><div class="qty-control"><button class="qty-btn" style="color:${itemTextCol}; font-family:${catFont}; font-size:${catSize};" onclick="changeQty('${sec.id}','${cat.id}',${i},-1)">-</button><span class="qty-value" style="color:${itemTextCol}; font-family:${catFont}; font-size:${catSize};">${it.qty}</span><button class="qty-btn" style="color:${itemTextCol}; font-family:${catFont}; font-size:${catSize};" onclick="changeQty('${sec.id}','${cat.id}',${i},1)">+</button></div><button class="icon-btn delete" onclick="deleteItem('${sec.id}','${cat.id}',${i})">🗑️</button></div></li>`;}});
                     if(cm||itemH){
                         f=true;
-                        catH+=`<div class="category-block" style="background:${catBg}; border-left:4px solid ${catAccent};"><div class="category-header"><span style="color:${catTitleCol}; font-family:${catFont};">📂 ${cat.name}</span><div><button class="icon-btn" onclick="openEditCategoryModal('${sec.id}','${cat.id}')">✏️</button><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;padding:8px;">Vide</li>'}</ul></div>`;
+                        catH+=`<div class="category-block" style="background:${catBg}; border-left:4px solid ${catAccent};"><div class="category-header"><span style="color:${catTitleCol}; font-family:${catFont}; font-size:${catSize};">📂 ${cat.name}</span><div><button class="icon-btn" onclick="openEditCategoryModal('${sec.id}','${cat.id}')">✏️</button><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;padding:8px;">Vide</li>'}</ul></div>`;
                     }
                 });
                 if(sm||catH){f=true;let d=document.createElement('div');d.className='section-card';d.innerHTML=`<div class="section-header" style="color:${secTitleCol};"><span>📁 ${sec.name}</span><button class="icon-btn delete" onclick="deleteSection('${sec.id}')">🗑️</button></div>${catH||'<div style="color:var(--text-muted)">Vide</div>'}`;c.appendChild(d);}
