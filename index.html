@@ -19,23 +19,29 @@
         .search-wrapper{position: relative; margin-bottom: 25px;}
         .search-input{width: 100%; padding: 14px 20px 14px 48px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 1em; background-color: var(--card-bg); color: var(--text); outline: none; box-shadow: var(--shadow);}
         .search-icon{position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted);}
-        .section-card{background: var(--card-bg); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); width: 100%;}
-        .section-header{display: flex; justify-content: space-between; align-items: center; font-size: 1.25em; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 12px; margin-bottom: 18px;}
-        .category-block{background: var(--bg); border-left: 4px solid var(--accent); padding: 14px 18px; margin-bottom: 14px; border-radius: 8px; border: 1px solid var(--border); width: 100%;}
-        .category-header{display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px;}
+        
+        /* Section principale */
+        .section-card{background: var(--card-bg); border-radius: var(--radius); padding: 24px 16px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); width: 100%;}
+        .section-header{display: flex; justify-content: space-between; align-items: center; font-size: 1.25em; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 12px; margin-bottom: 18px; margin-left: 8px; margin-right: 8px;}
+        
+        /* Rectangle gris pâle (Catégorie) qui dépasse du trait de part et d'autre */
+        .category-block{background: var(--bg); border-left: 4px solid var(--accent); padding: 14px 12px; margin-bottom: 14px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);}
+        .category-header{display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px; padding: 0 4px;}
+        
         .item-list{list-style: none; padding: 0; margin: 0;}
         
-        /* MODIFICATION ICI : Suppression des espaces superflus et collage absolu à gauche */
-        .item-row{display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border); width: 100%; gap: 10px;}
-        .item-left{display: flex; align-items: center; flex: 1; min-width: 0; margin-left: 0; padding-left: 0;}
-        .item-badge{background: var(--card-bg); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); font-size: 1em; width: 100%; min-height: 46px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 0;}
+        /* Ligne de l'article avec mini espaces aux extrémités gauche et droite */
+        .item-row{display: flex; justify-content: space-between; align-items: center; padding: 8px 4px; border-bottom: 1px dashed var(--border); width: 100%; gap: 8px;}
+        .item-left{display: flex; align-items: center; flex: 1; min-width: 0;}
+        .item-badge{background: var(--card-bg); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); font-size: 1em; width: 100%; min-height: 46px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
-        .item-right-controls{display: flex; align-items: center; gap: 10px; flex-shrink: 0;}
+        .item-right-controls{display: flex; align-items: center; gap: 8px; flex-shrink: 0;}
         .qty-control{display: flex; align-items: center; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; height: 46px;}
         .qty-btn{background: none; border: none; color: var(--text); font-weight: bold; padding: 6px 12px; cursor: pointer; height: 100%;}
         .qty-value{padding: 0 8px; font-weight: 600; min-width: 28px; text-align: center;}
         .icon-btn{background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 4px 8px; border-radius: 6px;}
         .icon-btn.delete:hover{background: rgba(229,57,53,0.1); color: #e53935;}
+        
         .modal{display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; padding: 15px;}
         .modal-content{background: var(--card-bg); color: var(--text); padding: 24px; border-radius: 16px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.2);}
         .modal-content h3{margin-top: 0; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px;}
@@ -97,7 +103,7 @@
         </div>
     </div>
     <script>
-        let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [{id:'sec_1',name:'Cuisine',categories:[{id:'cat_1',name:'Épicerie',items:[{name:'Riz',qty:2}]}]}];
+        let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [{id:'sec_1',name:'Garde Manger',categories:[{id:'cat_1',name:'Sauces',items:[{name:'Nom de l article',qty:1}]}]}];
         function openModal(id){document.getElementById(id).style.display='flex';if(id==='addModal'){updateFormFields();populateSelectOptions();}}
         function closeModal(id){document.getElementById(id).style.display='none';}
         function updateFormFields(){
@@ -136,7 +142,7 @@
                 sec.categories.forEach(cat=>{
                     let cm=cat.name.toLowerCase().includes(q)||sm, itemH='';
                     cat.items.forEach((it,i)=>{if(it.name.toLowerCase().includes(q)||cm){f=true;itemH+=`<li class="item-row"><div class="item-left"><span class="item-badge" title="${it.name}">${it.name}</span></div><div class="item-right-controls"><div class="qty-control"><button class="qty-btn" onclick="changeQty('${sec.id}','${cat.id}',${i},-1)">-</button><span class="qty-value">${it.qty}</span><button class="qty-btn" onclick="changeQty('${sec.id}','${cat.id}',${i},1)">+</button></div><button class="icon-btn delete" onclick="deleteItem('${sec.id}','${cat.id}',${i})">🗑️</button></div></li>`;}});
-                    if(cm||itemH){f=true;catH+=`<div class="category-block"><div class="category-header"><span>📂 ${cat.name}</span><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;">Vide</li>'}</ul></div>`;}
+                    if(cm||itemH){f=true;catH+=`<div class="category-block"><div class="category-header"><span>📂 ${cat.name}</span><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;padding:8px;">Vide</li>'}</ul></div>`;}
                 });
                 if(sm||catH){f=true;let d=document.createElement('div');d.className='section-card';d.innerHTML=`<div class="section-header"><span>📁 ${sec.name}</span><button class="icon-btn delete" onclick="deleteSection('${sec.id}')">🗑️</button></div>${catH||'<div style="color:var(--text-muted)">Vide</div>'}`;c.appendChild(d);}
             });
