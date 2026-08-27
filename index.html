@@ -124,9 +124,9 @@
             transform: translateY(-2px) scale(1.03);
         }
 
-        /* --- CONTENEUR & RECHERCHE --- */
+        /* --- CONTENEUR & RECHERCHE ÉLARGIS --- */
         .container {
-            max-width: 950px;
+            max-width: 1100px; /* Élargi pour une meilleure occupation de l'écran */
             margin: 30px auto;
             padding: 0 20px;
         }
@@ -300,7 +300,7 @@
             color: #e53935;
         }
 
-        /* --- FENÊTRES MODALES --- */
+        /* --- FENÊTRES MODALES & CHAMPS ÉLARGIS --- */
         .modal {
             display: none;
             position: fixed;
@@ -314,6 +314,7 @@
             align-items: center;
             justify-content: center;
             animation: modalFade 0.2s ease;
+            padding: 15px;
         }
 
         @keyframes modalFade {
@@ -324,10 +325,10 @@
         .modal-content {
             background: var(--card-bg);
             color: var(--text);
-            padding: 30px;
+            padding: 24px;
             border-radius: 16px;
-            width: 90%;
-            max-width: 480px;
+            width: 100%;
+            max-width: 560px; /* Modale plus large */
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
@@ -363,7 +364,7 @@
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
@@ -373,22 +374,25 @@
             font-size: 0.95em;
         }
 
+        /* Champs élargis à 100% avec taille confortable pour iPhone */
         .form-group input, 
         .form-group select {
             width: 100%;
-            padding: 12px;
+            min-height: 48px; /* Hauteur tactile idéale sur iPhone */
+            padding: 0 14px;
             box-sizing: border-box;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1em;
             background: var(--bg);
             color: var(--text);
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .form-group input:focus, .form-group select:focus {
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
         }
 
         .theme-toggle-group {
@@ -534,8 +538,8 @@
             </div>
 
             <div class="form-group">
-                <label>Nom :</label>
-                <input type="text" id="entryName" placeholder="Ex: Lait 2L, Épicerie, Frigo...">
+                <label id="labelEntryName">Nom de l'article :</label>
+                <input type="text" id="entryName" placeholder="Ex: Lait 2L...">
             </div>
 
             <div class="form-group" id="groupQtyField">
@@ -577,7 +581,7 @@
                 </div>
                 <div class="form-group">
                     <label>Couleur principale personnalisée :</label>
-                    <input type="color" id="themeColorPicker" value="#1b5e20" onchange="changeThemeColor(this.value)" style="width:100%; height:42px; border:none; border-radius:8px; cursor:pointer;">
+                    <input type="color" id="themeColorPicker" value="#1b5e20" onchange="changeThemeColor(this.value)" style="width:100%; height:48px; border:none; border-radius:10px; cursor:pointer;">
                 </div>
             </div>
 
@@ -664,6 +668,11 @@
             document.getElementById('groupSectionField').style.display = type === 'section' ? 'none' : 'block';
             document.getElementById('groupCategoryField').style.display = type === 'item' ? 'block' : 'none';
             document.getElementById('groupQtyField').style.display = type === 'item' ? 'block' : 'none';
+            
+            const labelName = document.getElementById('labelEntryName');
+            if (type === 'section') labelName.textContent = "Nom de la section :";
+            else if (type === 'category') labelName.textContent = "Nom de la catégorie :";
+            else labelName.textContent = "Nom de l'article :";
         }
 
         function populateSelectOptions() {
