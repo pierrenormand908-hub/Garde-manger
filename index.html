@@ -19,12 +19,13 @@
         .search-wrapper{position: relative; margin-bottom: 25px;}
         .search-input{width: 100%; padding: 14px 20px 14px 48px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 1em; background-color: var(--card-bg); color: var(--text); outline: none; box-shadow: var(--shadow);}
         .search-icon{position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted);}
-        .section-card{background: var(--card-bg); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border);}
+        .section-card{background: var(--card-bg); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); width: 100%;}
         .section-header{display: flex; justify-content: space-between; align-items: center; font-size: 1.25em; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 12px; margin-bottom: 18px;}
-        .category-block{background: var(--bg); border-left: 4px solid var(--accent); padding: 14px 18px; margin-bottom: 14px; border-radius: 8px; border: 1px solid var(--border);}
+        /* Correction : largeur 100% alignée sur la section */
+        .category-block{background: var(--bg); border-left: 4px solid var(--accent); padding: 14px 18px; margin-bottom: 14px; border-radius: 8px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); width: 100%;}
         .category-header{display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px;}
         .item-list{list-style: none; padding: 0; margin: 0;}
-        .item-row{display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border);}
+        .item-row{display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border); width: 100%;}
         .item-row:last-child{border-bottom: none;}
         .item-left{display: flex; align-items: center; gap: 10px; flex: 1; padding-right: 15px;}
         .item-badge{background: var(--card-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.95em; width: 100%; display: block;}
@@ -144,7 +145,7 @@
         function changeThemeMode(m){document.documentElement.setAttribute('data-theme',m==='dark'?'dark':'');document.getElementById('btnDarkMode').classList.toggle('active',m==='dark');document.getElementById('btnLightMode').classList.toggle('active',m==='light');localStorage.setItem('themeModePrestige',m);}
         function applyThemePreset(p,l,a){document.documentElement.style.setProperty('--primary',p);document.documentElement.style.setProperty('--primary-light',l);document.documentElement.style.setProperty('--accent',a);localStorage.setItem('primaryPrestige',p);localStorage.setItem('lightPrestige',l);localStorage.setItem('accentPrestige',a);}
         function exportData(){const d="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(pantryData));const a=document.createElement('a');a.href=d;a.download="garde_manger.json";a.click();a.remove();}
-        function importData(e){const r=new FileReader();r.onload=function(ev){try{pantryData=JSON.parse(ev.target.result);saveAndRender();alert('Importé !');}catch(err){alert('Erreur JSON');}};r.readAsText(e.target.files[0]);y}
+        function importData(e){const r=new FileReader();r.onload=function(ev){try{pantryData=JSON.parse(ev.target.result);saveAndRender();alert('Importé !');}catch(err){alert('Erreur JSON');}};r.readAsText(e.target.files[0]);}
         function resetData(){if(confirm('Réinitialiser ?')){pantryData=[];saveAndRender();closeModal('settingsModal');}}
         window.onload=function(){if(localStorage.getItem('primaryPrestige'))applyThemePreset(localStorage.getItem('primaryPrestige'),localStorage.getItem('lightPrestige'),localStorage.getItem('accentPrestige'));if(localStorage.getItem('themeModePrestige'))changeThemeMode(localStorage.getItem('themeModePrestige'));renderPantry();};
     </script>
