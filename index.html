@@ -21,17 +21,17 @@
         .search-icon{position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted);}
         .section-card{background: var(--card-bg); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); width: 100%;}
         .section-header{display: flex; justify-content: space-between; align-items: center; font-size: 1.25em; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 12px; margin-bottom: 18px;}
-        /* Correction : largeur 100% alignée sur la section */
-        .category-block{background: var(--bg); border-left: 4px solid var(--accent); padding: 14px 18px; margin-bottom: 14px; border-radius: 8px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); width: 100%;}
+        .category-block{background: var(--bg); border-left: 4px solid var(--accent); padding: 14px 18px; margin-bottom: 14px; border-radius: 8px; border: 1px solid var(--border); width: 100%;}
         .category-header{display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px;}
         .item-list{list-style: none; padding: 0; margin: 0;}
-        .item-row{display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border); width: 100%;}
+        .item-row{display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border); width: 100%;}
         .item-row:last-child{border-bottom: none;}
         .item-left{display: flex; align-items: center; gap: 10px; flex: 1; padding-right: 15px;}
-        .item-badge{background: var(--card-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.95em; width: 100%; display: block;}
+        /* Rectangle du nom de l'article élargi en largeur et hauteur pour un confort tactile optimal */
+        .item-badge{background: var(--card-bg); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); font-size: 1em; width: 100%; display: block; min-height: 46px; display: flex; align-items: center;}
         .item-right-controls{display: flex; align-items: center; gap: 12px;}
-        .qty-control{display: flex; align-items: center; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;}
-        .qty-btn{background: none; border: none; color: var(--text); font-weight: bold; padding: 6px 12px; cursor: pointer;}
+        .qty-control{display: flex; align-items: center; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; height: 46px;}
+        .qty-btn{background: none; border: none; color: var(--text); font-weight: bold; padding: 6px 12px; cursor: pointer; height: 100%;}
         .qty-value{padding: 0 8px; font-weight: 600; min-width: 28px; text-align: center;}
         .icon-btn{background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 4px 8px; border-radius: 6px;}
         .icon-btn.delete:hover{background: rgba(229,57,53,0.1); color: #e53935;}
