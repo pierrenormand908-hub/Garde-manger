@@ -1,945 +1,152 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Garde-Manger • Édition Prestige</title>
-    <!-- Icône pour Apple / iOS -->
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Garde-Manger</title>
     <link rel="apple-touch-icon" href="Garde-manger.png">
     <style>
-        :root {
-            --primary: #1b5e20;
-            --primary-light: #2e7d32;
-            --accent: #4caf50;
-            --bg: #f4f7f6;
-            --card-bg: #ffffff;
-            --text: #1a202c;
-            --text-muted: #718096;
-            --border: #e2e8f0;
-            --font-size: 16px;
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --radius: 12px;
-            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        [data-theme="dark"] {
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
-            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background-color: var(--bg);
-            color: var(--text);
-            font-size: var(--font-size);
-            margin: 0;
-            padding: 0;
-            padding-bottom: 90px;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        /* --- BARRE DE NAVIGATION MODERNE --- */
-        .navbar {
-            background-color: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 28px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.3em;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-icon {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1em;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .nav-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-btn {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-size: 1.1em;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .nav-btn.btn-add {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            border: none;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .nav-btn.btn-add:hover {
-            opacity: 0.95;
-            color: white;
-            transform: translateY(-2px) scale(1.03);
-        }
-
-        /* --- CONTENEUR & RECHERCHE ÉLARGIS --- */
-        .container {
-            max-width: 1100px; /* Élargi pour une meilleure occupation de l'écran */
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .search-wrapper {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 14px 20px 14px 48px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 1em;
-            background-color: var(--card-bg);
-            color: var(--text);
-            box-shadow: var(--shadow);
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1.1em;
-        }
-
-        /* --- SECTIONS & CARTES --- */
-        .section-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.25em;
-            font-weight: 700;
-            color: var(--primary);
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 12px;
-            margin-bottom: 18px;
-        }
-
-        .category-block {
-            background: var(--bg);
-            border-left: 4px solid var(--accent);
-            padding: 14px 18px;
-            margin-bottom: 14px;
-            border-radius: 8px;
-            border-top: 1px solid var(--border);
-            border-right: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 1.05em;
-        }
-
-        .item-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px dashed var(--border);
-        }
-
-        .item-row:last-child {
-            border-bottom: none;
-        }
-
-        .item-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-            padding-right: 15px;
-        }
-
-        .item-badge {
-            background: var(--card-bg);
-            padding: 4px 10px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            font-size: 0.9em;
-        }
-
-        /* Contrôles de quantité (+ / -) */
-        .item-right-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .qty-control {
-            display: flex;
-            align-items: center;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .qty-btn {
-            background: none;
-            border: none;
-            color: var(--text);
-            font-weight: bold;
-            padding: 6px 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .qty-btn:hover {
-            background: var(--bg);
-            color: var(--primary);
-        }
-
-        .qty-value {
-            padding: 0 8px;
-            font-weight: 600;
-            font-size: 0.95em;
-            min-width: 28px;
-            text-align: center;
-        }
-
-        /* Boutons d'action contextuels */
-        .icon-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1em;
-            padding: 4px 8px;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-
-        .icon-btn.delete:hover {
-            background: rgba(229, 57, 53, 0.1);
-            color: #e53935;
-        }
-
-        /* --- FENÊTRES MODALES & CHAMPS ÉLARGIS --- */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            animation: modalFade 0.2s ease;
-            padding: 15px;
-        }
-
-        @keyframes modalFade {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            color: var(--text);
-            padding: 24px;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 560px; /* Modale plus large */
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            border: 1px solid var(--border);
-        }
-
-        .modal-content h3 {
-            margin-top: 0;
-            color: var(--primary);
-            font-size: 1.4em;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-        }
-
-        .settings-section {
-            margin-bottom: 22px;
-            padding-bottom: 18px;
-            border-bottom: 1px dashed var(--border);
-        }
-
-        .settings-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-
-        .settings-section h4 {
-            margin: 0 0 12px 0;
-            font-size: 0.9em;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 0.95em;
-        }
-
-        /* Champs élargis à 100% avec taille confortable pour iPhone */
-        .form-group input, 
-        .form-group select {
-            width: 100%;
-            min-height: 48px; /* Hauteur tactile idéale sur iPhone */
-            padding: 0 14px;
-            box-sizing: border-box;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 1em;
-            background: var(--bg);
-            color: var(--text);
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
-        }
-
-        .theme-toggle-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .theme-toggle-btn {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: var(--bg);
-            color: var(--text);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .theme-toggle-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .color-presets {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .color-dot {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid var(--border);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .color-dot:hover {
-            transform: scale(1.15);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 25px;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: opacity 0.2s, transform 0.1s;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
-        }
-
-        .btn-secondary {
-            background-color: var(--bg);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .btn-danger {
-            background-color: #e53935;
-            color: white;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 60px 20px;
-            font-style: italic;
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-        }
+        :root {--primary: #1b5e20; --primary-light: #2e7d32; --accent: #4caf50; --bg: #f4f7f6; --card-bg: #ffffff; --text: #1a202c; --text-muted: #718096; --border: #e2e8f0; --font-size: 16px; --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; --radius: 12px; --shadow: 0 4px 20px -2px rgba(0,0,0,0.05);}
+        [data-theme="dark"] {--bg: #0f172a; --card-bg: #1e293b; --text: #f8fafc; --text-muted: #94a3b8; --border: #334155; --shadow: 0 4px 20px -2px rgba(0,0,0,0.3);}
+        *{box-sizing: border-box;}
+        body{font-family: var(--font-family); background-color: var(--bg); color: var(--text); font-size: var(--font-size); margin: 0; padding: 0 0 90px 0; transition: background 0.3s, color 0.3s;}
+        .navbar{background-color: var(--card-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.03);}
+        .nav-brand{display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.3em;}
+        .brand-icon{background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;}
+        .nav-controls{display: flex; align-items: center; gap: 12px;}
+        .nav-btn{background: var(--bg); border: 1px solid var(--border); color: var(--text); width: 42px; height: 42px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1em; transition: 0.2s;}
+        .nav-btn.btn-add{background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border: none; font-weight: bold;}
+        .container{max-width: 1100px; margin: 30px auto; padding: 0 20px;}
+        .search-wrapper{position: relative; margin-bottom: 25px;}
+        .search-input{width: 100%; padding: 14px 20px 14px 48px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 1em; background-color: var(--card-bg); color: var(--text); outline: none; box-shadow: var(--shadow);}
+        .search-icon{position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted);}
+        .section-card{background: var(--card-bg); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border);}
+        .section-header{display: flex; justify-content: space-between; align-items: center; font-size: 1.25em; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 12px; margin-bottom: 18px;}
+        .category-block{background: var(--bg); border-left: 4px solid var(--accent); padding: 14px 18px; margin-bottom: 14px; border-radius: 8px; border: 1px solid var(--border);}
+        .category-header{display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px;}
+        .item-list{list-style: none; padding: 0; margin: 0;}
+        .item-row{display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border);}
+        .item-row:last-child{border-bottom: none;}
+        .item-left{display: flex; align-items: center; gap: 10px; flex: 1; padding-right: 15px;}
+        .item-badge{background: var(--card-bg); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.9em; width: 100%;}
+        .item-right-controls{display: flex; align-items: center; gap: 12px;}
+        .qty-control{display: flex; align-items: center; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;}
+        .qty-btn{background: none; border: none; color: var(--text); font-weight: bold; padding: 6px 12px; cursor: pointer;}
+        .qty-value{padding: 0 8px; font-weight: 600; min-width: 28px; text-align: center;}
+        .icon-btn{background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 4px 8px; border-radius: 6px;}
+        .icon-btn.delete:hover{background: rgba(229,57,53,0.1); color: #e53935;}
+        .modal{display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; padding: 15px;}
+        .modal-content{background: var(--card-bg); color: var(--text); padding: 24px; border-radius: 16px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.2);}
+        .modal-content h3{margin-top: 0; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px;}
+        .settings-section{margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px dashed var(--border);}
+        .settings-section h4{margin: 0 0 12px 0; font-size: 0.9em; color: var(--text-muted); text-transform: uppercase;}
+        .form-group{margin-bottom: 18px;}
+        .form-group label{display: block; margin-bottom: 8px; font-weight: 500;}
+        .form-group input, .form-group select{width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 1em; background: var(--bg); color: var(--text); outline: none;}
+        .theme-toggle-group{display: flex; gap: 10px;}
+        .theme-toggle-btn{flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-weight: 600; cursor: pointer;}
+        .theme-toggle-btn.active{background: var(--primary); color: white; border-color: var(--primary);}
+        .color-presets{display: flex; gap: 12px; margin-bottom: 12px;}
+        .color-dot{width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid var(--border);}
+        .modal-actions{display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px;}
+        .btn{padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600;}
+        .btn-primary{background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white;}
+        .btn-secondary{background-color: var(--bg); color: var(--text); border: 1px solid var(--border);}
+        .btn-danger{background-color: #e53935; color: white;}
+        .empty-state{text-align: center; color: var(--text-muted); padding: 60px 20px; font-style: italic; background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border);}
     </style>
 </head>
 <body>
-
-    <!-- Barre de Navigation -->
     <nav class="navbar">
-        <div class="nav-brand">
-            <div class="brand-icon">🍏</div>
-            <span>Garde-Manger</span>
-        </div>
+        <div class="nav-brand"><div class="brand-icon">🍏</div><span>Garde-Manger</span></div>
         <div class="nav-controls">
-            <button class="nav-btn btn-add" onclick="openModal('addModal')" title="Ajouter">+</button>
-            <button class="nav-btn" onclick="openModal('settingsModal')" title="Paramètres">⚙️</button>
+            <button class="nav-btn btn-add" onclick="openModal('addModal')">+</button>
+            <button class="nav-btn" onclick="openModal('settingsModal')">⚙️</button>
         </div>
     </nav>
-
-    <!-- Contenu Principal -->
     <div class="container">
-        <!-- Barre de recherche -->
-        <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un article, une catégorie..." oninput="renderPantry()">
-        </div>
-
-        <!-- Conteneur dynamique des sections -->
+        <div class="search-wrapper"><span class="search-icon">🔍</span><input type="text" id="searchInput" class="search-input" placeholder="Rechercher..." oninput="renderPantry()"></div>
         <div id="app-container"></div>
     </div>
-
-    <!-- MODAL D'AJOUT -->
     <div id="addModal" class="modal">
         <div class="modal-content">
             <h3>✨ Ajouter un élément</h3>
-            <div class="form-group">
-                <label>Type d'entrée :</label>
-                <select id="entryType" onchange="updateFormFields()">
-                    <option value="item">Article</option>
-                    <option value="category">Catégorie</option>
-                    <option value="section">Section</option>
-                </select>
-            </div>
-
-            <div class="form-group" id="groupSectionField">
-                <label>Section parente :</label>
-                <select id="selectSection"></select>
-            </div>
-
-            <div class="form-group" id="groupCategoryField">
-                <label>Catégorie parente :</label>
-                <select id="selectCategory"></select>
-            </div>
-
-            <div class="form-group">
-                <label id="labelEntryName">Nom de l'article :</label>
-                <input type="text" id="entryName" placeholder="Ex: Lait 2L...">
-            </div>
-
-            <div class="form-group" id="groupQtyField">
-                <label>Quantité initiale :</label>
-                <input type="number" id="entryQty" value="1" min="1">
-            </div>
-
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal('addModal')">Fermer</button>
-                <button class="btn btn-primary" onclick="handleAddItem()">Ajouter</button>
-            </div>
+            <div class="form-group"><label>Type :</label><select id="entryType" onchange="updateFormFields()"><option value="item">Article</option><option value="category">Catégorie</option><option value="section">Section</option></select></div>
+            <div class="form-group" id="groupSectionField"><label>Section parente :</label><select id="selectSection"></select></div>
+            <div class="form-group" id="groupCategoryField"><label>Catégorie parente :</label><select id="selectCategory"></select></div>
+            <div class="form-group"><label id="labelEntryName">Nom :</label><input type="text" id="entryName" placeholder="Nom..."></div>
+            <div class="form-group" id="groupQtyField"><label>Quantité :</label><input type="number" id="entryQty" value="1" min="1"></div>
+            <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addModal')">Fermer</button><button class="btn btn-primary" onclick="handleAddItem()">Ajouter</button></div>
         </div>
     </div>
-
-    <!-- MODAL PARAMÈTRES AVANCÉS -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
-            <h3>⚙️ Paramètres & Personnalisation</h3>
-            
-            <!-- Apparence -->
+            <h3>⚙️ Paramètres</h3>
             <div class="settings-section">
-                <h4>Apparence & Thème</h4>
-                <div class="form-group">
-                    <label>Mode d'affichage :</label>
-                    <div class="theme-toggle-group">
-                        <button type="button" id="btnLightMode" class="theme-toggle-btn active" onclick="changeThemeMode('light')">☀️ Clair</button>
-                        <button type="button" id="btnDarkMode" class="theme-toggle-btn" onclick="changeThemeMode('dark')">🌙 Sombre</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Palettes de couleurs :</label>
-                    <div class="color-presets">
-                        <div class="color-dot" style="background: #1b5e20;" onclick="applyThemePreset('#1b5e20', '#2e7d32', '#4caf50')" title="Vert Nature"></div>
-                        <div class="color-dot" style="background: #0d47a1;" onclick="applyThemePreset('#0d47a1', '#1565c0', '#2196f3')" title="Bleu Océan"></div>
-                        <div class="color-dot" style="background: #4a148c;" onclick="applyThemePreset('#4a148c', '#6a1b9a', '#9c27b0')" title="Améthyste"></div>
-                        <div class="color-dot" style="background: #b71c1c;" onclick="applyThemePreset('#b71c1c', '#c62828', '#f44336')" title="Rubis Intense"></div>
-                        <div class="color-dot" style="background: #263238;" onclick="applyThemePreset('#263238', '#37474f', '#607d8b')" title="Gris Carbone"></div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Couleur principale personnalisée :</label>
-                    <input type="color" id="themeColorPicker" value="#1b5e20" onchange="changeThemeColor(this.value)" style="width:100%; height:48px; border:none; border-radius:10px; cursor:pointer;">
-                </div>
+                <h4>Thème</h4>
+                <div class="form-group"><div class="theme-toggle-group"><button type="button" id="btnLightMode" class="theme-toggle-btn active" onclick="changeThemeMode('light')">☀️ Clair</button><button type="button" id="btnDarkMode" class="theme-toggle-btn" onclick="changeThemeMode('dark')">🌙 Sombre</button></div></div>
+                <div class="form-group"><div class="color-presets"><div class="color-dot" style="background:#1b5e20;" onclick="applyThemePreset('#1b5e20','#2e7d32','#4caf50')"></div><div class="color-dot" style="background:#0d47a1;" onclick="applyThemePreset('#0d47a1','#1565c0','#2196f3')"></div><div class="color-dot" style="background:#b71c1c;" onclick="applyThemePreset('#b71c1c','#c62828','#f44336')"></div></div></div>
             </div>
-
-            <!-- Typographie -->
             <div class="settings-section">
-                <h4>Typographie</h4>
-                <div class="form-group">
-                    <label>Police :</label>
-                    <select id="fontFamilySelect" onchange="changeFontFamily(this.value)">
-                        <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">Moderne (Sans-serif)</option>
-                        <option value="Georgia, serif">Classique (Serif)</option>
-                        <option value="Courier New, monospace">Technique (Monospace)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Taille du texte :</label>
-                    <select id="fontSizeSelect" onchange="changeFontSize(this.value)">
-                        <option value="14px">Compact (14px)</option>
-                        <option value="16px" selected>Normal (16px)</option>
-                        <option value="18px">Grand (18px)</option>
-                        <option value="20px">Très grand (20px)</option>
-                    </select>
-                </div>
+                <h4>Données</h4>
+                <div style="display:flex;gap:10px;margin-bottom:12px;"><button class="btn btn-secondary" style="flex:1;" onclick="exportData()">📥 Exporter</button><button class="btn btn-secondary" style="flex:1;" onclick="document.getElementById('importFile').click()">📤 Importer</button><input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)"></div>
+                <button class="btn btn-danger" style="width:100%;" onclick="resetData()">⚠️ Réinitialiser</button>
             </div>
-
-            <!-- Données -->
-            <div class="settings-section">
-                <h4>Gestion des données</h4>
-                <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-                    <button class="btn btn-secondary" style="flex:1;" onclick="exportData()">📥 Exporter</button>
-                    <button class="btn btn-secondary" style="flex:1;" onclick="document.getElementById('importFile').click()">📤 Importer</button>
-                    <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)">
-                </div>
-                <button class="btn btn-danger" style="width:100%;" onclick="resetData()">⚠️ Tout réinitialiser</button>
-            </div>
-
-            <div class="modal-actions">
-                <button class="btn btn-primary" onclick="closeModal('settingsModal')">Fermer</button>
-            </div>
+            <div class="modal-actions"><button class="btn btn-primary" onclick="closeModal('settingsModal')">Fermer</button></div>
         </div>
     </div>
-
     <script>
-        let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [
-            {
-                id: 'sec_1',
-                name: 'Cuisine - Armoire Principale',
-                categories: [
-                    { id: 'cat_1', name: 'Épicerie Sèche', items: [{ name: 'Riz basmati', qty: 2 }, { name: 'Pâtes penne', qty: 1 }] },
-                    { id: 'cat_2', name: 'Conserves & Sauces', items: [{ name: 'Tomates concassées', qty: 3 }, { name: 'Thon au naturel', qty: 2 }] }
-                ]
-            },
-            {
-                id: 'sec_2',
-                name: 'Réfrigérateur',
-                categories: [
-                    { id: 'cat_3', name: 'Produits Laitiers', items: [{ name: 'Lait 2%', qty: 2 }, { name: 'Beurre doux', qty: 1 }] }
-                ]
-            }
-        ];
-
-        pantryData.forEach(sec => {
-            sec.categories.forEach(cat => {
-                cat.items = cat.items.map(item => {
-                    if (typeof item === 'string') {
-                        return { name: item, qty: 1 };
-                    }
-                    return item;
+        let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [{id:'sec_1',name:'Cuisine',categories:[{id:'cat_1',name:'Épicerie',items:[{name:'Riz',qty:2}]}]}];
+        function openModal(id){document.getElementById(id).style.display='flex';if(id==='addModal'){updateFormFields();populateSelectOptions();}}
+        function closeModal(id){document.getElementById(id).style.display='none';}
+        function updateFormFields(){
+            const t=document.getElementById('entryType').value;
+            document.getElementById('groupSectionField').style.display=t==='section'?'none':'block';
+            document.getElementById('groupCategoryField').style.display=t==='item'?'block':'none';
+            document.getElementById('groupQtyField').style.display=t==='item'?'block':'none';
+            document.getElementById('labelEntryName').textContent = t==='section'?"Nom de la section :":t==='category'?"Nom de la catégorie :":"Nom de l'article :";
+        }
+        function populateSelectOptions(){
+            const s=document.getElementById('selectSection');s.innerHTML='';
+            pantryData.forEach(x=>{let o=document.createElement('option');o.value=x.id;o.textContent=x.name;s.appendChild(o);});
+            updateCategoriesSelect();s.onchange=updateCategoriesSelect;
+        }
+        function updateCategoriesSelect(){
+            const sId=document.getElementById('selectSection').value, c=document.getElementById('selectCategory');c.innerHTML='';
+            const sec=pantryData.find(x=>x.id===sId);
+            if(sec&&sec.categories)sec.categories.forEach(x=>{let o=document.createElement('option');o.value=x.id;o.textContent=x.name;c.appendChild(o);});
+        }
+        function handleAddItem(){
+            const t=document.getElementById('entryType').value, n=document.getElementById('entryName').value.trim();
+            if(!n)return alert('Nom requis');
+            if(t==='section')pantryData.push({id:'sec_'+Date.now(),name:n,categories:[]});
+            else if(t==='category'){let s=pantryData.find(x=>x.id===document.getElementById('selectSection').value);if(s)s.categories.push({id:'cat_'+Date.now(),name:n,items:[]});}
+            else if(t==='item'){let s=pantryData.find(x=>x.id===document.getElementById('selectSection').value);if(s){let c=s.categories.find(x=>x.id===document.getElementById('selectCategory').value);if(c)c.items.push({name:n,qty:parseInt(document.getElementById('entryQty').value)||1});}}
+            saveAndRender();document.getElementById('entryName').value='';closeModal('addModal');
+        }
+        function changeQty(sId,cId,idx,delta){let s=pantryData.find(x=>x.id===sId);if(s){let c=s.categories.find(x=>x.id===cId);if(c&&c.items[idx]){c.items[idx].qty+=delta;if(c.items[idx].qty<0)c.items[idx].qty=0;saveAndRender();}}}
+        function deleteSection(id){if(confirm('Supprimer ?')){pantryData=pantryData.filter(x=>x.id!==id);saveAndRender();}}
+        function deleteCategory(sId,cId){if(confirm('Supprimer ?')){let s=pantryData.find(x=>x.id===sId);if(s)s.categories=s.categories.filter(x=>x.id!==cId);saveAndRender();}}
+        function deleteItem(sId,cId,idx){let s=pantryData.find(x=>x.id===sId);if(s){let c=s.categories.find(x=>x.id===cId);if(c){c.items.splice(idx,1);saveAndRender();}}}
+        function renderPantry(){
+            const c=document.getElementById('app-container'),q=document.getElementById('searchInput').value.toLowerCase();c.innerHTML='';let f=false;
+            pantryData.forEach(sec=>{
+                let sm=sec.name.toLowerCase().includes(q), catH='';
+                sec.categories.forEach(cat=>{
+                    let cm=cat.name.toLowerCase().includes(q)||sm, itemH='';
+                    cat.items.forEach((it,i)=>{if(it.name.toLowerCase().includes(q)||cm){f=true;itemH+=`<li class="item-row"><div class="item-left"><span class="item-badge">• ${it.name}</span></div><div class="item-right-controls"><div class="qty-control"><button class="qty-btn" onclick="changeQty('${sec.id}','${cat.id}',${i},-1)">-</button><span class="qty-value">${it.qty}</span><button class="qty-btn" onclick="changeQty('${sec.id}','${cat.id}',${i},1)">+</button></div><button class="icon-btn delete" onclick="deleteItem('${sec.id}','${cat.id}',${i})">🗑️</button></div></li>`;}});
+                    if(cm||itemH){f=true;catH+=`<div class="category-block"><div class="category-header"><span>📂 ${cat.name}</span><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;">Vide</li>'}</ul></div>`;}
                 });
+                if(sm||catH){f=true;let d=document.createElement('div');d.className='section-card';d.innerHTML=`<div class="section-header"><span>📁 ${sec.name}</span><button class="icon-btn delete" onclick="deleteSection('${sec.id}')">🗑️</button></div>${catH||'<div style="color:var(--text-muted)">Vide</div>'}`;c.appendChild(d);}
             });
-        });
-
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
-            if(id === 'addModal') {
-                updateFormFields();
-                populateSelectOptions();
-            }
+            if(!f)c.innerHTML='<div class="empty-state">Aucun résultat</div>';
         }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        function updateFormFields() {
-            const type = document.getElementById('entryType').value;
-            document.getElementById('groupSectionField').style.display = type === 'section' ? 'none' : 'block';
-            document.getElementById('groupCategoryField').style.display = type === 'item' ? 'block' : 'none';
-            document.getElementById('groupQtyField').style.display = type === 'item' ? 'block' : 'none';
-            
-            const labelName = document.getElementById('labelEntryName');
-            if (type === 'section') labelName.textContent = "Nom de la section :";
-            else if (type === 'category') labelName.textContent = "Nom de la catégorie :";
-            else labelName.textContent = "Nom de l'article :";
-        }
-
-        function populateSelectOptions() {
-            const secSelect = document.getElementById('selectSection');
-            secSelect.innerHTML = '';
-            pantryData.forEach(s => {
-                let opt = document.createElement('option');
-                opt.value = s.id; opt.textContent = s.name;
-                secSelect.appendChild(opt);
-            });
-            updateCategoriesSelect();
-            secSelect.onchange = updateCategoriesSelect;
-        }
-
-        function updateCategoriesSelect() {
-            const secId = document.getElementById('selectSection').value;
-            const catSelect = document.getElementById('selectCategory');
-            catSelect.innerHTML = '';
-            const section = pantryData.find(s => s.id === secId);
-            if (section && section.categories) {
-                section.categories.forEach(c => {
-                    let opt = document.createElement('option');
-                    opt.value = c.id; opt.textContent = c.name;
-                    catSelect.appendChild(opt);
-                });
-            }
-        }
-
-        function handleAddItem() {
-            const type = document.getElementById('entryType').value;
-            const name = document.getElementById('entryName').value.trim();
-            if (!name) return alert('Veuillez entrer un nom.');
-
-            if (type === 'section') {
-                pantryData.push({ id: 'sec_'+Date.now(), name, categories: [] });
-            } else if (type === 'category') {
-                let sec = pantryData.find(s => s.id === document.getElementById('selectSection').value);
-                if (sec) sec.categories.push({ id: 'cat_'+Date.now(), name, items: [] });
-            } else if (type === 'item') {
-                let sec = pantryData.find(s => s.id === document.getElementById('selectSection').value);
-                if (sec) {
-                    let cat = sec.categories.find(c => c.id === document.getElementById('selectCategory').value);
-                    if (cat) {
-                        let qty = parseInt(document.getElementById('entryQty').value) || 1;
-                        cat.items.push({ name, qty });
-                    }
-                }
-            }
-            saveAndRender();
-            document.getElementById('entryName').value = '';
-            document.getElementById('entryQty').value = '1';
-            closeModal('addModal');
-        }
-
-        function changeQty(sId, cId, idx, delta) {
-            let s = pantryData.find(x => x.id === sId);
-            if(s) {
-                let c = s.categories.find(x => x.id === cId);
-                if(c && c.items[idx]) {
-                    c.items[idx].qty += delta;
-                    if(c.items[idx].qty < 0) c.items[idx].qty = 0;
-                    saveAndRender();
-                }
-            }
-        }
-
-        function deleteSection(id) {
-            if(confirm('Supprimer cette section et tout son contenu ?')) {
-                pantryData = pantryData.filter(s => s.id !== id);
-                saveAndRender();
-            }
-        }
-        function deleteCategory(sId, cId) {
-            if(confirm('Supprimer cette catégorie ?')) {
-                let s = pantryData.find(x => x.id === sId);
-                if(s) s.categories = s.categories.filter(c => c.id !== cId);
-                saveAndRender();
-            }
-        }
-        function deleteItem(sId, cId, idx) {
-            let s = pantryData.find(x => x.id === sId);
-            if(s) {
-                let c = s.categories.find(x => x.id === cId);
-                if(c) {
-                    c.items.splice(idx, 1);
-                    saveAndRender();
-                }
-            }
-        }
-
-        function renderPantry() {
-            const container = document.getElementById('app-container');
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            container.innerHTML = '';
-            let found = false;
-
-            pantryData.forEach(sec => {
-                let secMatch = sec.name.toLowerCase().includes(search);
-                let catHTML = '';
-
-                sec.categories.forEach(cat => {
-                    let catMatch = cat.name.toLowerCase().includes(search) || secMatch;
-                    let itemsHTML = '';
-
-                    cat.items.forEach((itemObj, idx) => {
-                        if (itemObj.name.toLowerCase().includes(search) || catMatch) {
-                            found = true;
-                            itemsHTML += `
-                                <li class="item-row">
-                                    <div class="item-left">
-                                        <span class="item-badge">• ${itemObj.name}</span>
-                                    </div>
-                                    <div class="item-right-controls">
-                                        <div class="qty-control">
-                                            <button class="qty-btn" onclick="changeQty('${sec.id}','${cat.id}',${idx}, -1)" title="Diminuer">-</button>
-                                            <span class="qty-value">${itemObj.qty}</span>
-                                            <button class="qty-btn" onclick="changeQty('${sec.id}','${cat.id}',${idx}, 1)" title="Ajouter">+</button>
-                                        </div>
-                                        <button class="icon-btn delete" onclick="deleteItem('${sec.id}','${cat.id}',${idx})" title="Supprimer">🗑️</button>
-                                    </div>
-                                </li>
-                            `;
-                        }
-                    });
-
-                    if (catMatch || itemsHTML) {
-                        found = true;
-                        catHTML += `
-                            <div class="category-block">
-                                <div class="category-header">
-                                    <span>📂 ${cat.name}</span>
-                                    <button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')" title="Supprimer catégorie">❌</button>
-                                </div>
-                                <ul class="item-list">
-                                    ${itemsHTML || '<li style="color:var(--text-muted);font-size:0.9em;font-style:italic;padding:4px 0;">Aucun article</li>'}
-                                </ul>
-                            </div>
-                        `;
-                    }
-                });
-
-                if (secMatch || catHTML) {
-                    found = true;
-                    let div = document.createElement('div');
-                    div.className = 'section-card';
-                    div.innerHTML = `
-                        <div class="section-header">
-                            <span>📁 ${sec.name}</span>
-                            <button class="icon-btn delete" onclick="deleteSection('${sec.id}')" title="Supprimer section">🗑️</button>
-                        </div>
-                        ${catHTML || '<div style="color:var(--text-muted);font-style:italic;">Aucune catégorie</div>'}
-                    `;
-                    container.appendChild(div);
-                }
-            });
-
-            if (!found) {
-                container.innerHTML = '<div class="empty-state">Aucun résultat trouvé dans votre garde-manger.</div>';
-            }
-        }
-
-        function saveAndRender() {
-            localStorage.setItem('pantryDataPrestige', JSON.stringify(pantryData));
-            renderPantry();
-        }
-
-        function changeThemeMode(mode) {
-            const btnLight = document.getElementById('btnLightMode');
-            const btnDark = document.getElementById('btnDarkMode');
-
-            if(mode === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                btnDark.classList.add('active');
-                btnLight.classList.remove('active');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                btnLight.classList.add('active');
-                btnDark.classList.remove('active');
-            }
-            localStorage.setItem('themeModePrestige', mode);
-        }
-
-        function applyThemePreset(primary, light, accent) {
-            document.documentElement.style.setProperty('--primary', primary);
-            document.documentElement.style.setProperty('--primary-light', light);
-            document.documentElement.style.setProperty('--accent', accent);
-            document.getElementById('themeColorPicker').value = primary;
-            localStorage.setItem('primaryPrestige', primary);
-            localStorage.setItem('lightPrestige', light);
-            localStorage.setItem('accentPrestige', accent);
-        }
-
-        function changeThemeColor(color) {
-            document.documentElement.style.setProperty('--primary', color);
-            localStorage.setItem('primaryPrestige', color);
-        }
-
-        function changeFontFamily(font) {
-            document.documentElement.style.setProperty('--font-family', font);
-            localStorage.setItem('fontPrestige', font);
-        }
-
-        function changeFontSize(size) {
-            document.documentElement.style.setProperty('--font-size', size);
-            localStorage.setItem('fontSizePrestige', size);
-        }
-
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(pantryData));
-            const dl = document.createElement('a');
-            dl.setAttribute("href", dataStr);
-            dl.setAttribute("download", "garde_manger_backup.json");
-            document.body.appendChild(dl);
-            dl.click();
-            dl.remove();
-        }
-
-        function importData(event) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    pantryData = JSON.parse(e.target.result);
-                    pantryData.forEach(sec => {
-                        sec.categories.forEach(cat => {
-                            cat.items = cat.items.map(item => typeof item === 'string' ? { name: item, qty: 1 } : item);
-                        });
-                    });
-                    saveAndRender();
-                    alert('Données importées avec succès !');
-                } catch(err) {
-                    alert('Fichier JSON invalide.');
-                }
-            };
-            reader.readAsText(event.target.files[0]);
-        }
-
-        function resetData() {
-            if(confirm('Voulez-vous vraiment réinitialiser tout le garde-manger ?')) {
-                pantryData = [];
-                saveAndRender();
-                closeModal('settingsModal');
-            }
-        }
-
-        window.onload = function() {
-            if(localStorage.getItem('primaryPrestige')) {
-                let col = localStorage.getItem('primaryPrestige');
-                document.documentElement.style.setProperty('--primary', col);
-                document.getElementById('themeColorPicker').value = col;
-            }
-            if(localStorage.getItem('lightPrestige')) document.documentElement.style.setProperty('--primary-light', localStorage.getItem('lightPrestige'));
-            if(localStorage.getItem('accentPrestige')) document.documentElement.style.setProperty('--accent', localStorage.getItem('accentPrestige'));
-            if(localStorage.getItem('fontPrestige')) {
-                let f = localStorage.getItem('fontPrestige');
-                document.documentElement.style.setProperty('--font-family', f);
-                document.getElementById('fontFamilySelect').value = f;
-            }
-            if(localStorage.getItem('fontSizePrestige')) {
-                let fs = localStorage.getItem('fontSizePrestige');
-                document.documentElement.style.setProperty('--font-size', fs);
-                document.getElementById('fontSizeSelect').value = fs;
-            }
-            if(localStorage.getItem('themeModePrestige')) {
-                changeThemeMode(localStorage.getItem('themeModePrestige'));
-            }
-            renderPantry();
-        };
+        function saveAndRender(){localStorage.setItem('pantryDataPrestige',JSON.stringify(pantryData));renderPantry();}
+        function changeThemeMode(m){document.documentElement.setAttribute('data-theme',m==='dark'?'dark':'');document.getElementById('btnDarkMode').classList.toggle('active',m==='dark');document.getElementById('btnLightMode').classList.toggle('active',m==='light');localStorage.setItem('themeModePrestige',m);}
+        function applyThemePreset(p,l,a){document.documentElement.style.setProperty('--primary',p);document.documentElement.style.setProperty('--primary-light',l);document.documentElement.style.setProperty('--accent',a);localStorage.setItem('primaryPrestige',p);localStorage.setItem('lightPrestige',l);localStorage.setItem('accentPrestige',a);}
+        function exportData(){const d="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(pantryData));const a=document.createElement('a');a.href=d;a.download="garde_manger.json";a.click();a.remove();}
+        function importData(e){const r=new FileReader();r.onload=function(ev){try{pantryData=JSON.parse(ev.target.result);saveAndRender();alert('Importé !');}catch(err){alert('Erreur JSON');}};r.readAsText(e.target.files[0]);}
+        function resetData(){if(confirm('Réinitialiser ?')){pantryData=[];saveAndRender();closeModal('settingsModal');}}
+        window.onload=function(){if(localStorage.getItem('primaryPrestige'))applyThemePreset(localStorage.getItem('primaryPrestige'),localStorage.getItem('lightPrestige'),localStorage.getItem('accentPrestige'));if(localStorage.getItem('themeModePrestige'))changeThemeMode(localStorage.getItem('themeModePrestige'));renderPantry();};
     </script>
 </body>
 </html>
