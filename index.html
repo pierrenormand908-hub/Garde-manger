@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garde-Manger</title>
+    <title>Mon Garde-Manger</title>
     <link rel="apple-touch-icon" href="Garde-manger.png">
     <style>
         :root {
@@ -15,8 +15,6 @@
             --section-title-color: #1b5e20;
             --text-muted: #718096; 
             --border: #e2e8f0; 
-            --font-size: 16px; 
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             --radius: 12px; 
             --shadow: 0 4px 20px -2px rgba(0,0,0,0.05);
         }
@@ -30,7 +28,7 @@
             --shadow: 0 4px 20px -2px rgba(0,0,0,0.3);
         }
         *{box-sizing: border-box;}
-        body{font-family: var(--font-family); background-color: var(--bg); color: var(--text); font-size: var(--font-size); margin: 0; padding: 0 0 90px 0; transition: background 0.3s, color 0.3s;}
+        body{font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0 0 90px 0; transition: background 0.3s, color 0.3s;}
         
         .header-sticky-container{position: sticky; top: 0; z-index: 1000; background-color: var(--bg); transition: background 0.3s;}
         .navbar{background-color: var(--card-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);}
@@ -58,7 +56,7 @@
         .item-left{display: flex; align-items: center; flex: 1; min-width: 0;}
         
         /* Hauteur réduite pour le badge du nom et les contrôles de quantité */
-        .item-badge{background: var(--card-bg); color: var(--text); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 1em; width: 100%; min-height: 38px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .item-badge{background: var(--card-bg); color: var(--text); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); width: 100%; min-height: 38px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
         .item-right-controls{display: flex; align-items: center; gap: 8px; flex-shrink: 0;}
         .qty-control{display: flex; align-items: center; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; height: 38px;}
@@ -118,7 +116,7 @@
         </div>
     </div>
 
-    <!-- Modal d'édition des couleurs d'une catégorie -->
+    <!-- Modal d'édition (crayon) d'une catégorie -->
     <div id="editCategoryModal" class="modal">
         <div class="modal-content">
             <h3>✏️ Modifier la catégorie</h3>
@@ -127,6 +125,8 @@
             <div class="form-group"><label>Couleur du côté (bordure gauche) :</label><input type="color" id="editCatAccentInput"></div>
             <div class="form-group"><label>Couleur du titre de la catégorie :</label><input type="color" id="editCatTitleColorInput"></div>
             <div class="form-group"><label>Couleur générale du texte (articles) :</label><input type="color" id="editCatTextColorInput"></div>
+            <div class="form-group"><label>Police d'écriture :</label><select id="editCatFontFamilyInput"><option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">Système (Par défaut)</option><option value="'Georgia', serif">Georgia (Classique)</option><option value="'Courier New', monospace">Courier (Machine à écrire)</option><option value="'Trebuchet MS', sans-serif">Trebuchet (Moderne)</option><option value="'Verdana', sans-serif">Verdana (Lisible)</option></select></div>
+            <div class="form-group"><label>Taille de la police :</label><select id="editCatFontSizeInput"><option value="14px">Petite (14px)</option><option value="16px" selected>Normale (16px)</option><option value="18px">Grande (18px)</option><option value="20px">Très grande (20px)</option></select></div>
             <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('editCategoryModal')">Annuler</button><button class="btn btn-primary" onclick="saveCategoryEdition()">Enregistrer</button></div>
         </div>
     </div>
@@ -139,13 +139,11 @@
                 <div class="form-group"><div class="theme-toggle-group"><button type="button" id="btnLightMode" class="theme-toggle-btn active" onclick="changeThemeMode('light')">☀️ Clair</button><button type="button" id="btnDarkMode" class="theme-toggle-btn" onclick="changeThemeMode('dark')">🌙 Sombre</button></div></div>
             </div>
             <div class="settings-section">
-                <h4>Couleurs & Apparence</h4>
+                <h4>Couleurs globales</h4>
                 <div class="form-group"><label>Couleur principale (Primary) :</label><input type="color" id="primaryColorInput" value="#1b5e20" onchange="updateThemeStyles()"></div>
                 <div class="form-group"><label>Couleur principale claire (Primary-light) :</label><input type="color" id="primaryLightColorInput" value="#2e7d32" onchange="updateThemeStyles()"></div>
                 <div class="form-group"><label>Couleur d'accentuation globale :</label><input type="color" id="accentColorInput" value="#4caf50" onchange="updateThemeStyles()"></div>
                 <div class="form-group"><label>Couleur du nom de la section :</label><input type="color" id="sectionTitleColorInput" value="#1b5e20" onchange="updateThemeStyles()"></div>
-                <div class="form-group"><label>Police d'écriture :</label><select id="fontFamilySelect" onchange="updateThemeStyles()"><option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">Système (Par défaut)</option><option value="'Georgia', serif">Georgia (Classique)</option><option value="'Courier New', monospace">Courier (Machine à écrire)</option><option value="'Trebuchet MS', sans-serif">Trebuchet (Moderne)</option><option value="'Verdana', sans-serif">Verdana (Lisible)</option></select></div>
-                <div class="form-group"><label>Taille de la police :</label><select id="fontSizeSelect" onchange="updateThemeStyles()"><option value="14px">Petite (14px)</option><option value="16px" selected>Normale (16px)</option><option value="18px">Grande (18px)</option><option value="20px">Très grande (20px)</option></select></div>
                 <div class="color-presets" style="margin-top: 10px;">
                     <div class="color-dot" style="background:#1b5e20;" onclick="applyThemePreset('#1b5e20','#2e7d32','#4caf50','#1b5e20')"></div>
                     <div class="color-dot" style="background:#0d47a1;" onclick="applyThemePreset('#0d47a1','#1565c0','#2196f3','#0d47a1')"></div>
@@ -161,7 +159,7 @@
         </div>
     </div>
     <script>
-        let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [{id:'sec_1',name:'Garde Manger',categories:[{id:'cat_1',name:'Sauces',bg:'#f4f7f6',accent:'#4caf50',titleColor:'#1a202c',textColor:'#1a202c',items:[{name:'Nom de l article',qty:1}]}]}];
+        let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [{id:'sec_1',name:'Garde Manger',categories:[{id:'cat_1',name:'Sauces',bg:'#f4f7f6',accent:'#4caf50',titleColor:'#1a202c',textColor:'#1a202c',fontFamily:"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",fontSize:"16px",items:[{name:'Nom de l article',qty:1}]}]}];
         
         let currentEditSecId = null;
         let currentEditCatId = null;
@@ -192,7 +190,7 @@
             if(t==='section')pantryData.push({id:'sec_'+Date.now(),name:n,categories:[]});
             else if(t==='category'){
                 let s=pantryData.find(x=>x.id===document.getElementById('selectSection').value);
-                if(s)s.categories.push({id:'cat_'+Date.now(),name:n,bg:'#f4f7f6',accent:'#4caf50',titleColor:'#1a202c',textColor:'#1a202c',items:[]});
+                if(s)s.categories.push({id:'cat_'+Date.now(),name:n,bg:'#f4f7f6',accent:'#4caf50',titleColor:'#1a202c',textColor:'#1a202c',fontFamily:"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",fontSize:"16px",items:[]});
             }
             else if(t==='item'){
                 let s=pantryData.find(x=>x.id===document.getElementById('selectSection').value);
@@ -214,6 +212,8 @@
             document.getElementById('editCatAccentInput').value = cat.accent || '#4caf50';
             document.getElementById('editCatTitleColorInput').value = cat.titleColor || '#1a202c';
             document.getElementById('editCatTextColorInput').value = cat.textColor || '#1a202c';
+            document.getElementById('editCatFontFamilyInput').value = cat.fontFamily || "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+            document.getElementById('editCatFontSizeInput').value = cat.fontSize || "16px";
 
             document.getElementById('editCategoryModal').style.display = 'flex';
         }
@@ -229,6 +229,8 @@
             cat.accent = document.getElementById('editCatAccentInput').value;
             cat.titleColor = document.getElementById('editCatTitleColorInput').value;
             cat.textColor = document.getElementById('editCatTextColorInput').value;
+            cat.fontFamily = document.getElementById('editCatFontFamilyInput').value;
+            cat.fontSize = document.getElementById('editCatFontSizeInput').value;
 
             saveAndRender();
             closeModal('editCategoryModal');
@@ -251,11 +253,13 @@
                     let catAccent = cat.accent || '#4caf50';
                     let catTitleCol = cat.titleColor || '#1a202c';
                     let itemTextCol = cat.textColor || '#1a202c';
+                    let catFont = cat.fontFamily || "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+                    let catSize = cat.fontSize || "16px";
 
-                    cat.items.forEach((it,i)=>{if(it.name.toLowerCase().includes(q)||cm){f=true;itemH+=`<li class="item-row"><div class="item-left"><span class="item-badge" style="color:${itemTextCol};" title="${it.name}">${it.name}</span></div><div class="item-right-controls"><div class="qty-control"><button class="qty-btn" style="color:${itemTextCol};" onclick="changeQty('${sec.id}','${cat.id}',${i},-1)">-</button><span class="qty-value" style="color:${itemTextCol};">${it.qty}</span><button class="qty-btn" style="color:${itemTextCol};" onclick="changeQty('${sec.id}','${cat.id}',${i},1)">+</button></div><button class="icon-btn delete" onclick="deleteItem('${sec.id}','${cat.id}',${i})">🗑️</button></div></li>`;}});
+                    cat.items.forEach((it,i)=>{if(it.name.toLowerCase().includes(q)||cm){f=true;itemH+=`<li class="item-row"><div class="item-left"><span class="item-badge" style="color:${itemTextCol}; font-family:${catFont}; font-size:${catSize};" title="${it.name}">${it.name}</span></div><div class="item-right-controls"><div class="qty-control"><button class="qty-btn" style="color:${itemTextCol}; font-family:${catFont}; font-size:${catSize};" onclick="changeQty('${sec.id}','${cat.id}',${i},-1)">-</button><span class="qty-value" style="color:${itemTextCol}; font-family:${catFont}; font-size:${catSize};">${it.qty}</span><button class="qty-btn" style="color:${itemTextCol}; font-family:${catFont}; font-size:${catSize};" onclick="changeQty('${sec.id}','${cat.id}',${i},1)">+</button></div><button class="icon-btn delete" onclick="deleteItem('${sec.id}','${cat.id}',${i})">🗑️</button></div></li>`;}});
                     if(cm||itemH){
                         f=true;
-                        catH+=`<div class="category-block" style="background:${catBg}; border-left:4px solid ${catAccent};"><div class="category-header"><span style="color:${catTitleCol};">📂 ${cat.name}</span><div><button class="icon-btn" onclick="openEditCategoryModal('${sec.id}','${cat.id}')">✏️</button><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;padding:8px;">Vide</li>'}</ul></div>`;
+                        catH+=`<div class="category-block" style="background:${catBg}; border-left:4px solid ${catAccent};"><div class="category-header"><span style="color:${catTitleCol}; font-family:${catFont};">📂 ${cat.name}</span><div><button class="icon-btn" onclick="openEditCategoryModal('${sec.id}','${cat.id}')">✏️</button><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;padding:8px;">Vide</li>'}</ul></div>`;
                     }
                 });
                 if(sm||catH){f=true;let d=document.createElement('div');d.className='section-card';d.innerHTML=`<div class="section-header" style="color:${secTitleCol};"><span>📁 ${sec.name}</span><button class="icon-btn delete" onclick="deleteSection('${sec.id}')">🗑️</button></div>${catH||'<div style="color:var(--text-muted)">Vide</div>'}`;c.appendChild(d);}
@@ -281,22 +285,16 @@
             const primaryLight = document.getElementById('primaryLightColorInput').value;
             const accent = document.getElementById('accentColorInput').value;
             const secTitle = document.getElementById('sectionTitleColorInput').value;
-            const fontFamily = document.getElementById('fontFamilySelect').value;
-            const fontSize = document.getElementById('fontSizeSelect').value;
 
             document.documentElement.style.setProperty('--primary', primary);
             document.documentElement.style.setProperty('--primary-light', primaryLight);
             document.documentElement.style.setProperty('--accent', accent);
             document.documentElement.style.setProperty('--section-title-color', secTitle);
-            document.documentElement.style.setProperty('--font-family', fontFamily);
-            document.documentElement.style.setProperty('--font-size', fontSize);
 
             localStorage.setItem('primaryPrestige', primary);
             localStorage.setItem('primaryLightPrestige', primaryLight);
             localStorage.setItem('accentPrestige', accent);
             localStorage.setItem('secTitlePrestige', secTitle);
-            localStorage.setItem('fontFamilyPrestige', fontFamily);
-            localStorage.setItem('fontSizePrestige', fontSize);
             
             renderPantry();
         }
@@ -310,12 +308,6 @@
                 document.getElementById('accentColorInput').value = localStorage.getItem('accentPrestige');
                 if(localStorage.getItem('secTitlePrestige')) {
                     document.getElementById('sectionTitleColorInput').value = localStorage.getItem('secTitlePrestige');
-                }
-                if(localStorage.getItem('fontFamilyPrestige')) {
-                    document.getElementById('fontFamilySelect').value = localStorage.getItem('fontFamilyPrestige');
-                }
-                if(localStorage.getItem('fontSizePrestige')) {
-                    document.getElementById('fontSizeSelect').value = localStorage.getItem('fontSizePrestige');
                 }
                 updateThemeStyles();
             }
