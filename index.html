@@ -24,6 +24,156 @@
         .category-block{background: var(--bg); border-left: 4px solid var(--accent); padding: 14px 18px; margin-bottom: 14px; border-radius: 8px; border: 1px solid var(--border); width: 100%;}
         .category-header{display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px;}
         .item-list{list-style: none; padding: 0; margin: 0;}
+        .item-row{display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border); width: 100%; gap: 15px;}
+        .item-left{display: flex; align-items: center; flex: 1; min-width: 0;}
+        .item-badge{background: var(--card-bg); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); font-size: 1em; width: 100%; min-height: 46px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .item-right-controls{display: flex; align-items: center; gap: 12px; flex-shrink: 0;}
+        .qty-control{display: flex; align-items: center; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; height: 46px;}
+        .qty-btn{background: none; border: none; color: var(--text); font-weight: bold; padding: 6px 12px; cursor: pointer; height: 100%;}
+        .qty-value{padding: 0 8px; font-weight: 600; min-width: 28px; text-align: center;}
+        .icon-btn{background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 4px 8px; border-radius: 6px;}
+        .icon-btn.delete:hover{background: rgba(229,57,53,0.1); color: #e53935;}
+        .modal{display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; padding: 15px;}
+        .modal-content{background: var(--card-bg); color: var(--text); padding: 24px; border-radius: 16px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.2);}
+        .modal-content h3{margin-top: 0; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px;}
+        .settings-section{margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px dashed var(--border);}
+        .settings-section h4{margin: 0 0 12px 0; font-size: 0.9em; color: var(--text-muted); text-transform: uppercase;}
+        .form-group{margin-bottom: 18px;}
+        .form-group label{display: block; margin-bottom: 8px; font-weight: 500;}
+        .form-group input, .form-group select{width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 1em; background: var(--bg); color: var(--text); outline: none;}
+        .theme-toggle-group{display: flex; gap: 10px;}
+        .theme-toggle-btn{flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-weight: 600; cursor: pointer;}
+        .theme-toggle-btn.active{background: var(--primary); color: white; border-color: var(--primary);}
+        .color-presets{display: flex; gap: 12px; margin-bottom: 12px;}
+        .color-dot{width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid var(--border);}
+        .modal-actions{display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px;}
+        .btn{padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600;}
+        .btn-primary{background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white;}
+        .btn-secondary{background-color: var(--bg); color: var(--text); border: 1px solid var(--border);}
+        .btn-danger{background-color: #e53935; color: white;}
+        .empty-state{text-align: center; color: var(--text-muted); padding: 60px 20px; font-style: italic; background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border);}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand"><div class="brand-icon">🍏</div><span>Garde-Manger</span></div>
+        <div class="nav-controls">
+            <button class="nav-btn btn-add" onclick="openModal('addModal')">+</button>
+            <button class="nav-btn" onclick="openModal('settingsModal')">⚙️</button>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="search-wrapper"><span class="search-icon">🔍</span><input type="text" id="searchInput" class="search-input" placeholder="Rechercher..." oninput="renderPantry()"></div>
+        <div id="app-container"></div>
+    </div>
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h3>✨ Ajouter un élément</h3>
+            <div class="form-group"><label>Type :</label><select id="entryType" onchange="updateFormFields()"><option value="item">Article</option><option value="category">Catégorie</option><option value="section">Section</option></select></div>
+            <div class="form-group" id="groupSectionField"><label>Section parente :</label><select id="selectSection"></select></div>
+            <div class="form-group" id="groupCategoryField"><label>Catégorie parente :</label><select id="selectCategory"></select></div>
+            <div class="form-group"><label id="labelEntryName">Nom :</label><input type="text" id="entryName" placeholder="Nom..."></div>
+            <div class="form-group" id="groupQtyField"><label>Quantité :</label><input type="number" id="entryQty" value="1" min="1"></div>
+            <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addModal')">Fermer</button><button class="btn btn-primary" onclick="handleAddItem()">Ajouter</button></div>
+        </div>
+    </div>
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h3>⚙️ Paramètres</h3>
+            <div class="settings-section">
+                <h4>Thème</h4>
+                <div class="form-group"><div class="theme-toggle-group"><button type="button" id="btnLightMode" class="theme-toggle-btn active" onclick="changeThemeMode('light')">☀️ Clair</button><button type="button" id="btnDarkMode" class="theme-toggle-btn" onclick="changeThemeMode('dark')">🌙 Sombre</button></div></div>
+                <div class="form-group"><div class="color-presets"><div class="color-dot" style="background:#1b5e20;" onclick="applyThemePreset('#1b5e20','#2e7d32','#4caf50')"></div><div class="color-dot" style="background:#0d47a1;" onclick="applyThemePreset('#0d47a1','#1565c0','#2196f3')"></div><div class="color-dot" style="background:#b71c1c;" onclick="applyThemePreset('#b71c1c','#c62828','#f44336')"></div></div></div>
+            </div>
+            <div class="settings-section">
+                <h4>Données</h4>
+                <div style="display:flex;gap:10px;margin-bottom:12px;"><button class="btn btn-secondary" style="flex:1;" onclick="exportData()">📥 Exporter</button><button class="btn btn-secondary" style="flex:1;" onclick="document.getElementById('importFile').click()">📤 Importer</button><input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)"></div>
+                <button class="btn btn-danger" style="width:100%;" onclick="resetData()">⚠️ Réinitialiser</button>
+            </div>
+            <div class="modal-actions"><button class="btn btn-primary" onclick="closeModal('settingsModal')">Fermer</button></div>
+        </div>
+    </div>
+    <script>
+        let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [{id:'sec_1',name:'Cuisine',categories:[{id:'cat_1',name:'Épicerie',items:[{name:'Riz',qty:2}]}]}];
+        function openModal(id){document.getElementById(id).style.display='flex';if(id==='addModal'){updateFormFields();populateSelectOptions();}}
+        function closeModal(id){document.getElementById(id).style.display='none';}
+        function updateFormFields(){
+            const t=document.getElementById('entryType').value;
+            document.getElementById('groupSectionField').style.display=t==='section'?'none':'block';
+            document.getElementById('groupCategoryField').style.display=t==='item'?'block':'none';
+            document.getElementById('groupQtyField').style.display=t==='item'?'block':'none';
+            document.getElementById('labelEntryName').textContent = t==='section'?"Nom de la section :":t==='category'?"Nom de la catégorie :":"Nom de l'article :";
+        }
+        function populateSelectOptions(){
+            const s=document.getElementById('selectSection');s.innerHTML='';
+            pantryData.forEach(x=>{let o=document.createElement('option');o.value=x.id;o.textContent=x.name;s.appendChild(o);});
+            updateCategoriesSelect();s.onchange=updateCategoriesSelect;
+        }
+        function updateCategoriesSelect(){
+            const sId=document.getElementById('selectSection').value, c=document.getElementById('selectCategory');c.innerHTML='';
+            const sec=pantryData.find(x=>x.id===sId);
+            if(sec&&sec.categories)sec.categories.forEach(x=>{let o=document.createElement('option');o.value=x.id;o.textContent=x.name;c.appendChild(o);});
+        }
+        function handleAddItem(){
+            const t=document.getElementById('entryType').value, n=document.getElementById('entryName').value.trim();
+            if(!n)return alert('Nom requis');
+            if(t==='section')pantryData.push({id:'sec_'+Date.now(),name:n,categories:[]});
+            else if(t==='category'){let s=pantryData.find(x=>x.id===document.getElementById('selectSection').value);if(s)s.categories.push({id:'cat_'+Date.now(),name:n,items:[]});}
+            else if(t==='item'){let s=pantryData.find(x=>x.id===document.getElementById('selectSection').value);if(s){let c=s.categories.find(x=>x.id===document.getElementById('selectCategory').value);if(c)c.items.push({name:n,qty:parseInt(document.getElementById('entryQty').value)||1});}}
+            saveAndRender();document.getElementById('entryName').value='';closeModal('addModal');
+        }
+        function changeQty(sId,cId,idx,delta){let s=pantryData.find(x=>x.id===sId);if(s){let c=s.categories.find(x=>x.id===cId);if(c&&c.items[idx]){c.items[idx].qty+=delta;if(c.items[idx].qty<0)c.items[idx].qty=0;saveAndRender();}}}
+        function deleteSection(id){if(confirm('Supprimer ?')){pantryData=pantryData.filter(x=>x.id!==id);saveAndRender();}}
+        function deleteCategory(sId,cId){if(confirm('Supprimer ?')){let s=pantryData.find(x=>x.id===sId);if(s)s.categories=s.categories.filter(x=>x.id!==cId);saveAndRender();}}
+        function deleteItem(sId,cId,idx){let s=pantryData.find(x=>x.id===sId);if(s){let c=s.categories.find(x=>x.id===cId);if(c){c.items.splice(idx,1);saveAndRender();}}}
+        function renderPantry(){
+            const c=document.getElementById('app-container'),q=document.getElementById('searchInput').value.toLowerCase();c.innerHTML='';let f=false;
+            pantryData.forEach(sec=>{
+                let sm=sec.name.toLowerCase().includes(q), catH='';
+                sec.categories.forEach(cat=>{
+                    let cm=cat.name.toLowerCase().includes(q)||sm, itemH='';
+                    cat.items.forEach((it,i)=>{if(it.name.toLowerCase().includes(q)||cm){f=true;itemH+=`<li class="item-row"><div class="item-left"><span class="item-badge" title="${it.name}">${it.name}</span></div><div class="item-right-controls"><div class="qty-control"><button class="qty-btn" onclick="changeQty('${sec.id}','${cat.id}',${i},-1)">-</button><span class="qty-value">${it.qty}</span><button class="qty-btn" onclick="changeQty('${sec.id}','${cat.id}',${i},1)">+</button></div><button class="icon-btn delete" onclick="deleteItem('${sec.id}','${cat.id}',${i})">🗑️</button></div></li>`;}});
+                    if(cm||itemH){f=true;catH+=`<div class="category-block"><div class="category-header"><span>📂 ${cat.name}</span><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;">Vide</li>'}</ul></div>`;}
+                });
+                if(sm||catH){f=true;let d=document.createElement('div');d.className='section-card';d.innerHTML=`<div class="section-header"><span>📁 ${sec.name}</span><button class="icon-btn delete" onclick="deleteSection('${sec.id}')">🗑️</button></div>${catH||'<div style="color:var(--text-muted)">Vide</div>'}`;c.appendChild(d);}
+            });
+            if(!f)c.innerHTML='<div class="empty-state">Aucun résultat</div>';
+        }
+        function saveAndRender(){localStorage.setItem('pantryDataPrestige',JSON.stringify(pantryData));renderPantry();}
+        function changeThemeMode(m){document.documentElement.setAttribute('data-theme',m==='dark'?'dark':'');document.getElementById('btnDarkMode').classList.toggle('active',m==='dark');document.getElementById('btnLightMode').classList.toggle('active',m==='light');localStorage.setItem('themeModePrestige',m);}
+        function applyThemePreset(p,l,a){document.documentElement.style.setProperty('--primary',p);document.documentElement.style.setProperty('--primary-light',l);document.documentElement.style.setProperty('--accent',a);localStorage.setItem('primaryPrestige',p);localStorage.setItem('lightPrestige',l);localStorage.setItem('accentPrestige',a);}
+        function exportData(){const d="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(pantryData));const a=document.createElement('a');a.href=d;a.download="garde_manger.json";a.click();a.remove();}
+        function importData(e){const r=new FileReader();r.onload=function(ev){try{pantryData=JSON.parse(ev.target.result);saveAndRender();alert('Importé !');}catch(err){alert('Erreur JSON');}};r.readAsText(e.target.files[0]);}
+        function resetData(){if(confirm('Réinitialiser ?')){pantryData=[];saveAndRender();closeModal('settingsModal');}}
+        window.onload=function(){if(localStorage.getItem('primaryPrestige'))applyThemePreset(localStorage.getItem('primaryPrestige'),localStorage.getItem('lightPrestige'),localStorage.getItem('accentPrestige'));if(localStorage.getItem('themeModePrestige'))changeThemeMode(localStorage.getItem('themeModePrestige'));renderPantry();};
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Garde-Manger</title>
+    <link rel="apple-touch-icon" href="Garde-manger.png">
+    <style>
+        :root {--primary: #1b5e20; --primary-light: #2e7d32; --accent: #4caf50; --bg: #f4f7f6; --card-bg: #ffffff; --text: #1a202c; --text-muted: #718096; --border: #e2e8f0; --font-size: 16px; --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; --radius: 12px; --shadow: 0 4px 20px -2px rgba(0,0,0,0.05);}
+        [data-theme="dark"] {--bg: #0f172a; --card-bg: #1e293b; --text: #f8fafc; --text-muted: #94a3b8; --border: #334155; --shadow: 0 4px 20px -2px rgba(0,0,0,0.3);}
+        *{box-sizing: border-box;}
+        body{font-family: var(--font-family); background-color: var(--bg); color: var(--text); font-size: var(--font-size); margin: 0; padding: 0 0 90px 0; transition: background 0.3s, color 0.3s;}
+        .navbar{background-color: var(--card-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.03);}
+        .nav-brand{display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.3em;}
+        .brand-icon{background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;}
+        .nav-controls{display: flex; align-items: center; gap: 12px;}
+        .nav-btn{background: var(--bg); border: 1px solid var(--border); color: var(--text); width: 42px; height: 42px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1em; transition: 0.2s;}
+        .nav-btn.btn-add{background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border: none; font-weight: bold;}
+        .container{max-width: 1100px; margin: 30px auto; padding: 0 20px;}
+        .search-wrapper{position: relative; margin-bottom: 25px;}
+        .search-input{width: 100%; padding: 14px 20px 14px 48px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 1em; background-color: var(--card-bg); color: var(--text); outline: none; box-shadow: var(--shadow);}
+        .search-icon{position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted);}
+        .section-card{background: var(--card-bg); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); width: 100%;}
+        .section-header{display: flex; justify-content: space-between; align-items: center; font-size: 1.25em; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 12px; margin-bottom: 18px;}
+        .category-block{background: var(--bg); border-left: 4px solid var(--accent); padding: 14px 18px; margin-bottom: 14px; border-radius: 8px; border: 1px solid var(--border); width: 100%;}
+        .category-header{display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px;}
+        .item-list{list-style: none; padding: 0; margin: 0;}
         .item-row{display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border); width: 100%;}
         .item-row:last-child{border-bottom: none;}
         /* Espace maximal alloué au nom de l'article avec gestion du texte long sur une seule ligne */
