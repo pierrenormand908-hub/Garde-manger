@@ -54,14 +54,16 @@
         .category-header{display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px; padding: 0 4px;}
         
         .item-list{list-style: none; padding: 0; margin: 0;}
-        .item-row{display: flex; justify-content: space-between; align-items: center; padding: 8px 4px; border-bottom: 1px dashed var(--border); width: 100%; gap: 8px;}
+        .item-row{display: flex; justify-content: space-between; align-items: center; padding: 6px 4px; border-bottom: 1px dashed var(--border); width: 100%; gap: 8px;}
         .item-left{display: flex; align-items: center; flex: 1; min-width: 0;}
-        .item-badge{background: var(--card-bg); color: var(--text); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); font-size: 1em; width: 100%; min-height: 46px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        
+        /* Hauteur réduite pour le badge du nom et les contrôles de quantité */
+        .item-badge{background: var(--card-bg); color: var(--text); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 1em; width: 100%; min-height: 38px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
         .item-right-controls{display: flex; align-items: center; gap: 8px; flex-shrink: 0;}
-        .qty-control{display: flex; align-items: center; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; height: 46px;}
-        .qty-btn{background: none; border: none; color: var(--text); font-weight: bold; padding: 6px 12px; cursor: pointer; height: 100%;}
-        .qty-value{padding: 0 8px; font-weight: 600; min-width: 28px; text-align: center; color: var(--text);}
+        .qty-control{display: flex; align-items: center; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; height: 38px;}
+        .qty-btn{background: none; border: none; color: var(--text); font-weight: bold; padding: 4px 10px; cursor: pointer; height: 100%;}
+        .qty-value{padding: 0 6px; font-weight: 600; min-width: 24px; text-align: center; color: var(--text);}
         .icon-btn{background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 4px 8px; border-radius: 6px;}
         .icon-btn.delete:hover{background: rgba(229,57,53,0.1); color: #e53935;}
         
@@ -137,11 +139,12 @@
                 <div class="form-group"><div class="theme-toggle-group"><button type="button" id="btnLightMode" class="theme-toggle-btn active" onclick="changeThemeMode('light')">☀️ Clair</button><button type="button" id="btnDarkMode" class="theme-toggle-btn" onclick="changeThemeMode('dark')">🌙 Sombre</button></div></div>
             </div>
             <div class="settings-section">
-                <h4>Couleurs du thème</h4>
+                <h4>Couleurs & Apparence</h4>
                 <div class="form-group"><label>Couleur principale (Primary) :</label><input type="color" id="primaryColorInput" value="#1b5e20" onchange="updateThemeStyles()"></div>
                 <div class="form-group"><label>Couleur principale claire (Primary-light) :</label><input type="color" id="primaryLightColorInput" value="#2e7d32" onchange="updateThemeStyles()"></div>
                 <div class="form-group"><label>Couleur d'accentuation globale :</label><input type="color" id="accentColorInput" value="#4caf50" onchange="updateThemeStyles()"></div>
                 <div class="form-group"><label>Couleur du nom de la section :</label><input type="color" id="sectionTitleColorInput" value="#1b5e20" onchange="updateThemeStyles()"></div>
+                <div class="form-group"><label>Taille de la police :</label><select id="fontSizeSelect" onchange="updateThemeStyles()"><option value="14px">Petite (14px)</option><option value="16px" selected>Normale (16px)</option><option value="18px">Grande (18px)</option><option value="20px">Très grande (20px)</option></select></div>
                 <div class="color-presets" style="margin-top: 10px;">
                     <div class="color-dot" style="background:#1b5e20;" onclick="applyThemePreset('#1b5e20','#2e7d32','#4caf50','#1b5e20')"></div>
                     <div class="color-dot" style="background:#0d47a1;" onclick="applyThemePreset('#0d47a1','#1565c0','#2196f3','#0d47a1')"></div>
@@ -277,16 +280,19 @@
             const primaryLight = document.getElementById('primaryLightColorInput').value;
             const accent = document.getElementById('accentColorInput').value;
             const secTitle = document.getElementById('sectionTitleColorInput').value;
+            const fontSize = document.getElementById('fontSizeSelect').value;
 
             document.documentElement.style.setProperty('--primary', primary);
             document.documentElement.style.setProperty('--primary-light', primaryLight);
             document.documentElement.style.setProperty('--accent', accent);
             document.documentElement.style.setProperty('--section-title-color', secTitle);
+            document.documentElement.style.setProperty('--font-size', fontSize);
 
             localStorage.setItem('primaryPrestige', primary);
             localStorage.setItem('primaryLightPrestige', primaryLight);
             localStorage.setItem('accentPrestige', accent);
             localStorage.setItem('secTitlePrestige', secTitle);
+            localStorage.setItem('fontSizePrestige', fontSize);
             
             renderPantry();
         }
@@ -300,6 +306,9 @@
                 document.getElementById('accentColorInput').value = localStorage.getItem('accentPrestige');
                 if(localStorage.getItem('secTitlePrestige')) {
                     document.getElementById('sectionTitleColorInput').value = localStorage.getItem('secTitlePrestige');
+                }
+                if(localStorage.getItem('fontSizePrestige')) {
+                    document.getElementById('fontSizeSelect').value = localStorage.getItem('fontSizePrestige');
                 }
                 updateThemeStyles();
             }
