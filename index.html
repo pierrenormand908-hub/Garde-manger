@@ -141,10 +141,11 @@
                 <div class="form-group"><label>Couleur principale (Primary) :</label><input type="color" id="primaryColorInput" value="#1b5e20" onchange="updateThemeStyles()"></div>
                 <div class="form-group"><label>Couleur principale claire (Primary-light) :</label><input type="color" id="primaryLightColorInput" value="#2e7d32" onchange="updateThemeStyles()"></div>
                 <div class="form-group"><label>Couleur d'accentuation globale :</label><input type="color" id="accentColorInput" value="#4caf50" onchange="updateThemeStyles()"></div>
+                <div class="form-group"><label>Couleur du nom de la section :</label><input type="color" id="sectionTitleColorInput" value="#1b5e20" onchange="updateThemeStyles()"></div>
                 <div class="color-presets" style="margin-top: 10px;">
-                    <div class="color-dot" style="background:#1b5e20;" onclick="applyThemePreset('#1b5e20','#2e7d32','#4caf50')"></div>
-                    <div class="color-dot" style="background:#0d47a1;" onclick="applyThemePreset('#0d47a1','#1565c0','#2196f3')"></div>
-                    <div class="color-dot" style="background:#b71c1c;" onclick="applyThemePreset('#b71c1c','#c62828','#f44336')"></div>
+                    <div class="color-dot" style="background:#1b5e20;" onclick="applyThemePreset('#1b5e20','#2e7d32','#4caf50','#1b5e20')"></div>
+                    <div class="color-dot" style="background:#0d47a1;" onclick="applyThemePreset('#0d47a1','#1565c0','#2196f3','#0d47a1')"></div>
+                    <div class="color-dot" style="background:#b71c1c;" onclick="applyThemePreset('#b71c1c','#c62828','#f44336','#b71c1c')"></div>
                 </div>
             </div>
             <div class="settings-section">
@@ -236,6 +237,8 @@
         
         function renderPantry(){
             const c=document.getElementById('app-container'),q=document.getElementById('searchInput').value.toLowerCase();c.innerHTML='';let f=false;
+            const secTitleCol = document.documentElement.style.getPropertyValue('--section-title-color') || '#1b5e20';
+
             pantryData.forEach(sec=>{
                 let sm=sec.name.toLowerCase().includes(q), catH='';
                 sec.categories.forEach(cat=>{
@@ -251,7 +254,7 @@
                         catH+=`<div class="category-block" style="background:${catBg}; border-left:4px solid ${catAccent};"><div class="category-header"><span style="color:${catTitleCol};">📂 ${cat.name}</span><div><button class="icon-btn" onclick="openEditCategoryModal('${sec.id}','${cat.id}')">✏️</button><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;padding:8px;">Vide</li>'}</ul></div>`;
                     }
                 });
-                if(sm||catH){f=true;let d=document.createElement('div');d.className='section-card';d.innerHTML=`<div class="section-header"><span>📁 ${sec.name}</span><button class="icon-btn delete" onclick="deleteSection('${sec.id}')">🗑️</button></div>${catH||'<div style="color:var(--text-muted)">Vide</div>'}`;c.appendChild(d);}
+                if(sm||catH){f=true;let d=document.createElement('div');d.className='section-card';d.innerHTML=`<div class="section-header" style="color:${secTitleCol};"><span>📁 ${sec.name}</span><button class="icon-btn delete" onclick="deleteSection('${sec.id}')">🗑️</button></div>${catH||'<div style="color:var(--text-muted)">Vide</div>'}`;c.appendChild(d);}
             });
             if(!f)c.innerHTML='<div class="empty-state">Aucun résultat</div>';
         }
@@ -262,24 +265,30 @@
             document.getElementById('btnLightMode').classList.toggle('active',m==='light');
             localStorage.setItem('themeModePrestige',m);
         }
-        function applyThemePreset(p,l,a){
+        function applyThemePreset(p,l,a,s){
             document.getElementById('primaryColorInput').value = p;
             document.getElementById('primaryLightColorInput').value = l;
             document.getElementById('accentColorInput').value = a;
+            document.getElementById('sectionTitleColorInput').value = s;
             updateThemeStyles();
         }
         function updateThemeStyles(){
             const primary = document.getElementById('primaryColorInput').value;
             const primaryLight = document.getElementById('primaryLightColorInput').value;
             const accent = document.getElementById('accentColorInput').value;
+            const secTitle = document.getElementById('sectionTitleColorInput').value;
 
             document.documentElement.style.setProperty('--primary', primary);
             document.documentElement.style.setProperty('--primary-light', primaryLight);
             document.documentElement.style.setProperty('--accent', accent);
+            document.documentElement.style.setProperty('--section-title-color', secTitle);
 
             localStorage.setItem('primaryPrestige', primary);
             localStorage.setItem('primaryLightPrestige', primaryLight);
             localStorage.setItem('accentPrestige', accent);
+            localStorage.setItem('secTitlePrestige', secTitle);
+            
+            renderPantry();
         }
         function exportData(){const d="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(pantryData));const a=document.createElement('a');a.href=d;a.download="garde_manger.json";a.click();a.remove();}
         function importData(e){const r=new FileReader();r.onload=function(ev){try{pantryData=JSON.parse(ev.target.result);saveAndRender();alert('Importé !');}catch(err){alert('Erreur JSON');}};r.readAsText(e.target.files[0]);}
@@ -289,6 +298,9 @@
                 document.getElementById('primaryColorInput').value = localStorage.getItem('primaryPrestige');
                 document.getElementById('primaryLightColorInput').value = localStorage.getItem('primaryLightPrestige');
                 document.getElementById('accentColorInput').value = localStorage.getItem('accentPrestige');
+                if(localStorage.getItem('secTitlePrestige')) {
+                    document.getElementById('sectionTitleColorInput').value = localStorage.getItem('secTitlePrestige');
+                }
                 updateThemeStyles();
             }
             if(localStorage.getItem('themeModePrestige'))changeThemeMode(localStorage.getItem('themeModePrestige'));
