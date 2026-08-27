@@ -13,8 +13,6 @@
             --card-bg: #ffffff; 
             --text: #1a202c; 
             --section-title-color: #1b5e20;
-            --category-bg: #f4f7f6;
-            --category-title-color: #1a202c;
             --text-muted: #718096; 
             --border: #e2e8f0; 
             --font-size: 16px; 
@@ -27,8 +25,6 @@
             --card-bg: #1e293b; 
             --text: #f8fafc; 
             --section-title-color: #38bdf8;
-            --category-bg: #334155;
-            --category-title-color: #f8fafc;
             --text-muted: #94a3b8; 
             --border: #334155; 
             --shadow: 0 4px 20px -2px rgba(0,0,0,0.3);
@@ -36,7 +32,6 @@
         *{box-sizing: border-box;}
         body{font-family: var(--font-family); background-color: var(--bg); color: var(--text); font-size: var(--font-size); margin: 0; padding: 0 0 90px 0; transition: background 0.3s, color 0.3s;}
         
-        /* En-tête et barre de recherche fixes en haut */
         .header-sticky-container{position: sticky; top: 0; z-index: 1000; background-color: var(--bg); transition: background 0.3s;}
         .navbar{background-color: var(--card-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);}
         .nav-brand{display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.3em;}
@@ -52,17 +47,13 @@
 
         .container{max-width: 1100px; margin: 15px auto 30px auto; padding: 0 20px;}
         
-        /* Section principale */
         .section-card{background: var(--card-bg); border-radius: var(--radius); padding: 24px 16px; margin-bottom: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); width: 100%;}
         .section-header{display: flex; justify-content: space-between; align-items: center; font-size: 1.25em; font-weight: 700; color: var(--section-title-color); border-bottom: 2px solid var(--border); padding-bottom: 12px; margin-bottom: 18px; margin-left: 8px; margin-right: 8px;}
         
-        /* Rectangle gris pâle (Catégorie) qui dépasse du trait de part et d'autre */
-        .category-block{background: var(--category-bg); border-left: 4px solid var(--accent); padding: 14px 12px; margin-bottom: 14px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);}
-        .category-header{display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: var(--category-title-color); margin-bottom: 10px; padding: 0 4px;}
+        .category-block{padding: 14px 12px; margin-bottom: 14px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);}
+        .category-header{display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 10px; padding: 0 4px;}
         
         .item-list{list-style: none; padding: 0; margin: 0;}
-        
-        /* Ligne de l'article avec mini espaces aux extrémités gauche et droite */
         .item-row{display: flex; justify-content: space-between; align-items: center; padding: 8px 4px; border-bottom: 1px dashed var(--border); width: 100%; gap: 8px;}
         .item-left{display: flex; align-items: center; flex: 1; min-width: 0;}
         .item-badge{background: var(--card-bg); color: var(--text); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); font-size: 1em; width: 100%; min-height: 46px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
@@ -124,6 +115,20 @@
             <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addModal')">Fermer</button><button class="btn btn-primary" onclick="handleAddItem()">Ajouter</button></div>
         </div>
     </div>
+
+    <!-- Modal d'édition des couleurs d'une catégorie -->
+    <div id="editCategoryModal" class="modal">
+        <div class="modal-content">
+            <h3>✏️ Modifier la catégorie</h3>
+            <div class="form-group"><label>Nom de la catégorie :</label><input type="text" id="editCatNameInput"></div>
+            <div class="form-group"><label>Couleur de fond (rectangle gris) :</label><input type="color" id="editCatBgInput"></div>
+            <div class="form-group"><label>Couleur du côté (bordure gauche) :</label><input type="color" id="editCatAccentInput"></div>
+            <div class="form-group"><label>Couleur du titre de la catégorie :</label><input type="color" id="editCatTitleColorInput"></div>
+            <div class="form-group"><label>Couleur générale du texte (articles) :</label><input type="color" id="editCatTextColorInput"></div>
+            <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('editCategoryModal')">Annuler</button><button class="btn btn-primary" onclick="saveCategoryEdition()">Enregistrer</button></div>
+        </div>
+    </div>
+
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <h3>⚙️ Paramètres & Apparence</h3>
@@ -132,24 +137,15 @@
                 <div class="form-group"><div class="theme-toggle-group"><button type="button" id="btnLightMode" class="theme-toggle-btn active" onclick="changeThemeMode('light')">☀️ Clair</button><button type="button" id="btnDarkMode" class="theme-toggle-btn" onclick="changeThemeMode('dark')">🌙 Sombre</button></div></div>
             </div>
             <div class="settings-section">
-                <h4>Couleurs principales du thème</h4>
-                <div class="form-group"><label>Couleur principale (Primary) :</label><input type="color" id="primaryColorInput" value="#1b5e20" onchange="updateCustomStyles()"></div>
-                <div class="form-group"><label>Couleur principale claire (Primary-light) :</label><input type="color" id="primaryLightColorInput" value="#2e7d32" onchange="updateCustomStyles()"></div>
-                <div class="form-group"><label>Couleur d'accentuation (Accent) :</label><input type="color" id="accentColorInput" value="#4caf50" onchange="updateCustomStyles()"></div>
+                <h4>Couleurs du thème</h4>
+                <div class="form-group"><label>Couleur principale (Primary) :</label><input type="color" id="primaryColorInput" value="#1b5e20" onchange="updateThemeStyles()"></div>
+                <div class="form-group"><label>Couleur principale claire (Primary-light) :</label><input type="color" id="primaryLightColorInput" value="#2e7d32" onchange="updateThemeStyles()"></div>
+                <div class="form-group"><label>Couleur d'accentuation globale :</label><input type="color" id="accentColorInput" value="#4caf50" onchange="updateThemeStyles()"></div>
                 <div class="color-presets" style="margin-top: 10px;">
                     <div class="color-dot" style="background:#1b5e20;" onclick="applyThemePreset('#1b5e20','#2e7d32','#4caf50')"></div>
                     <div class="color-dot" style="background:#0d47a1;" onclick="applyThemePreset('#0d47a1','#1565c0','#2196f3')"></div>
                     <div class="color-dot" style="background:#b71c1c;" onclick="applyThemePreset('#b71c1c','#c62828','#f44336')"></div>
                 </div>
-            </div>
-            <div class="settings-section">
-                <h4>Personnalisation des éléments & tailles</h4>
-                <div class="form-group"><label>Couleur de fond de la section :</label><input type="color" id="cardBgColorInput" value="#ffffff" onchange="updateCustomStyles()"></div>
-                <div class="form-group"><label>Couleur du rectangle gris (catégorie) :</label><input type="color" id="catBgColorInput" value="#f4f7f6" onchange="updateCustomStyles()"></div>
-                <div class="form-group"><label>Couleur du titre de la section :</label><input type="color" id="sectionTitleColorInput" value="#1b5e20" onchange="updateCustomStyles()"></div>
-                <div class="form-group"><label>Couleur du nom de la catégorie :</label><input type="color" id="catTitleColorInput" value="#1a202c" onchange="updateCustomStyles()"></div>
-                <div class="form-group"><label>Couleur générale du texte :</label><input type="color" id="textColorInput" value="#1a202c" onchange="updateCustomStyles()"></div>
-                <div class="form-group"><label>Taille de la police :</label><select id="fontSizeSelect" onchange="updateCustomStyles()"><option value="14px">Petite (14px)</option><option value="16px" selected>Normale (16px)</option><option value="18px">Grande (18px)</option><option value="20px">Très grande (20px)</option></select></div>
             </div>
             <div class="settings-section">
                 <h4>Données</h4>
@@ -160,9 +156,14 @@
         </div>
     </div>
     <script>
-        let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [{id:'sec_1',name:'Garde Manger',categories:[{id:'cat_1',name:'Sauces',items:[{name:'Nom de l article',qty:1}]}]}];
+        let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [{id:'sec_1',name:'Garde Manger',categories:[{id:'cat_1',name:'Sauces',bg:'#f4f7f6',accent:'#4caf50',titleColor:'#1a202c',textColor:'#1a202c',items:[{name:'Nom de l article',qty:1}]}]}];
+        
+        let currentEditSecId = null;
+        let currentEditCatId = null;
+
         function openModal(id){document.getElementById(id).style.display='flex';if(id==='addModal'){updateFormFields();populateSelectOptions();}}
         function closeModal(id){document.getElementById(id).style.display='none';}
+        
         function updateFormFields(){
             const t=document.getElementById('entryType').value;
             document.getElementById('groupSectionField').style.display=t==='section'?'none':'block';
@@ -184,22 +185,71 @@
             const t=document.getElementById('entryType').value, n=document.getElementById('entryName').value.trim();
             if(!n)return alert('Nom requis');
             if(t==='section')pantryData.push({id:'sec_'+Date.now(),name:n,categories:[]});
-            else if(t==='category'){let s=pantryData.find(x=>x.id===document.getElementById('selectSection').value);if(s)s.categories.push({id:'cat_'+Date.now(),name:n,items:[]});}
-            else if(t==='item'){let s=pantryData.find(x=>x.id===document.getElementById('selectSection').value);if(s){let c=s.categories.find(x=>x.id===document.getElementById('selectCategory').value);if(c)c.items.push({name:n,qty:parseInt(document.getElementById('entryQty').value)||1});}}
+            else if(t==='category'){
+                let s=pantryData.find(x=>x.id===document.getElementById('selectSection').value);
+                if(s)s.categories.push({id:'cat_'+Date.now(),name:n,bg:'#f4f7f6',accent:'#4caf50',titleColor:'#1a202c',textColor:'#1a202c',items:[]});
+            }
+            else if(t==='item'){
+                let s=pantryData.find(x=>x.id===document.getElementById('selectSection').value);
+                if(s){let c=s.categories.find(x=>x.id===document.getElementById('selectCategory').value);if(c)c.items.push({name:n,qty:parseInt(document.getElementById('entryQty').value)||1});}
+            }
             saveAndRender();document.getElementById('entryName').value='';closeModal('addModal');
         }
+        
+        function openEditCategoryModal(sId, cId){
+            currentEditSecId = sId;
+            currentEditCatId = cId;
+            const sec = pantryData.find(x => x.id === sId);
+            if(!sec) return;
+            const cat = sec.categories.find(x => x.id === cId);
+            if(!cat) return;
+
+            document.getElementById('editCatNameInput').value = cat.name;
+            document.getElementById('editCatBgInput').value = cat.bg || '#f4f7f6';
+            document.getElementById('editCatAccentInput').value = cat.accent || '#4caf50';
+            document.getElementById('editCatTitleColorInput').value = cat.titleColor || '#1a202c';
+            document.getElementById('editCatTextColorInput').value = cat.textColor || '#1a202c';
+
+            document.getElementById('editCategoryModal').style.display = 'flex';
+        }
+
+        function saveCategoryEdition(){
+            const sec = pantryData.find(x => x.id === currentEditSecId);
+            if(!sec) return;
+            const cat = sec.categories.find(x => x.id === currentEditCatId);
+            if(!cat) return;
+
+            cat.name = document.getElementById('editCatNameInput').value.trim() || cat.name;
+            cat.bg = document.getElementById('editCatBgInput').value;
+            cat.accent = document.getElementById('editCatAccentInput').value;
+            cat.titleColor = document.getElementById('editCatTitleColorInput').value;
+            cat.textColor = document.getElementById('editCatTextColorInput').value;
+
+            saveAndRender();
+            closeModal('editCategoryModal');
+        }
+
         function changeQty(sId,cId,idx,delta){let s=pantryData.find(x=>x.id===sId);if(s){let c=s.categories.find(x=>x.id===cId);if(c&&c.items[idx]){c.items[idx].qty+=delta;if(c.items[idx].qty<0)c.items[idx].qty=0;saveAndRender();}}}
         function deleteSection(id){if(confirm('Supprimer ?')){pantryData=pantryData.filter(x=>x.id!==id);saveAndRender();}}
         function deleteCategory(sId,cId){if(confirm('Supprimer ?')){let s=pantryData.find(x=>x.id===sId);if(s)s.categories=s.categories.filter(x=>x.id!==cId);saveAndRender();}}
         function deleteItem(sId,cId,idx){let s=pantryData.find(x=>x.id===sId);if(s){let c=s.categories.find(x=>x.id===cId);if(c){c.items.splice(idx,1);saveAndRender();}}}
+        
         function renderPantry(){
             const c=document.getElementById('app-container'),q=document.getElementById('searchInput').value.toLowerCase();c.innerHTML='';let f=false;
             pantryData.forEach(sec=>{
                 let sm=sec.name.toLowerCase().includes(q), catH='';
                 sec.categories.forEach(cat=>{
                     let cm=cat.name.toLowerCase().includes(q)||sm, itemH='';
-                    cat.items.forEach((it,i)=>{if(it.name.toLowerCase().includes(q)||cm){f=true;itemH+=`<li class="item-row"><div class="item-left"><span class="item-badge" title="${it.name}">${it.name}</span></div><div class="item-right-controls"><div class="qty-control"><button class="qty-btn" onclick="changeQty('${sec.id}','${cat.id}',${i},-1)">-</button><span class="qty-value">${it.qty}</span><button class="qty-btn" onclick="changeQty('${sec.id}','${cat.id}',${i},1)">+</button></div><button class="icon-btn delete" onclick="deleteItem('${sec.id}','${cat.id}',${i})">🗑️</button></div></li>`;}});
-                    if(cm||itemH){f=true;catH+=`<div class="category-block"><div class="category-header"><span>📂 ${cat.name}</span><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;padding:8px;">Vide</li>'}</ul></div>`;}
+                    let catBg = cat.bg || '#f4f7f6';
+                    let catAccent = cat.accent || '#4caf50';
+                    let catTitleCol = cat.titleColor || '#1a202c';
+                    let itemTextCol = cat.textColor || '#1a202c';
+
+                    cat.items.forEach((it,i)=>{if(it.name.toLowerCase().includes(q)||cm){f=true;itemH+=`<li class="item-row"><div class="item-left"><span class="item-badge" style="color:${itemTextCol};" title="${it.name}">${it.name}</span></div><div class="item-right-controls"><div class="qty-control"><button class="qty-btn" style="color:${itemTextCol};" onclick="changeQty('${sec.id}','${cat.id}',${i},-1)">-</button><span class="qty-value" style="color:${itemTextCol};">${it.qty}</span><button class="qty-btn" style="color:${itemTextCol};" onclick="changeQty('${sec.id}','${cat.id}',${i},1)">+</button></div><button class="icon-btn delete" onclick="deleteItem('${sec.id}','${cat.id}',${i})">🗑️</button></div></li>`;}});
+                    if(cm||itemH){
+                        f=true;
+                        catH+=`<div class="category-block" style="background:${catBg}; border-left:4px solid ${catAccent};"><div class="category-header"><span style="color:${catTitleCol};">📂 ${cat.name}</span><div><button class="icon-btn" onclick="openEditCategoryModal('${sec.id}','${cat.id}')">✏️</button><button class="icon-btn delete" onclick="deleteCategory('${sec.id}','${cat.id}')">❌</button></div></div><ul class="item-list">${itemH||'<li style="color:var(--text-muted);font-style:italic;padding:8px;">Vide</li>'}</ul></div>`;
+                    }
                 });
                 if(sm||catH){f=true;let d=document.createElement('div');d.className='section-card';d.innerHTML=`<div class="section-header"><span>📁 ${sec.name}</span><button class="icon-btn delete" onclick="deleteSection('${sec.id}')">🗑️</button></div>${catH||'<div style="color:var(--text-muted)">Vide</div>'}`;c.appendChild(d);}
             });
@@ -216,38 +266,20 @@
             document.getElementById('primaryColorInput').value = p;
             document.getElementById('primaryLightColorInput').value = l;
             document.getElementById('accentColorInput').value = a;
-            updateCustomStyles();
+            updateThemeStyles();
         }
-        function updateCustomStyles(){
+        function updateThemeStyles(){
             const primary = document.getElementById('primaryColorInput').value;
             const primaryLight = document.getElementById('primaryLightColorInput').value;
             const accent = document.getElementById('accentColorInput').value;
-            const cardBg = document.getElementById('cardBgColorInput').value;
-            const catBg = document.getElementById('catBgColorInput').value;
-            const secTitle = document.getElementById('sectionTitleColorInput').value;
-            const catTitle = document.getElementById('catTitleColorInput').value;
-            const textCol = document.getElementById('textColorInput').value;
-            const fontSize = document.getElementById('fontSizeSelect').value;
 
             document.documentElement.style.setProperty('--primary', primary);
             document.documentElement.style.setProperty('--primary-light', primaryLight);
             document.documentElement.style.setProperty('--accent', accent);
-            document.documentElement.style.setProperty('--card-bg', cardBg);
-            document.documentElement.style.setProperty('--category-bg', catBg);
-            document.documentElement.style.setProperty('--section-title-color', secTitle);
-            document.documentElement.style.setProperty('--category-title-color', catTitle);
-            document.documentElement.style.setProperty('--text', textCol);
-            document.documentElement.style.setProperty('--font-size', fontSize);
 
             localStorage.setItem('primaryPrestige', primary);
             localStorage.setItem('primaryLightPrestige', primaryLight);
             localStorage.setItem('accentPrestige', accent);
-            localStorage.setItem('cardBgPrestige', cardBg);
-            localStorage.setItem('catBgPrestige', catBg);
-            localStorage.setItem('secTitlePrestige', secTitle);
-            localStorage.setItem('catTitlePrestige', catTitle);
-            localStorage.setItem('textPrestige', textCol);
-            localStorage.setItem('fontSizePrestige', fontSize);
         }
         function exportData(){const d="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(pantryData));const a=document.createElement('a');a.href=d;a.download="garde_manger.json";a.click();a.remove();}
         function importData(e){const r=new FileReader();r.onload=function(ev){try{pantryData=JSON.parse(ev.target.result);saveAndRender();alert('Importé !');}catch(err){alert('Erreur JSON');}};r.readAsText(e.target.files[0]);}
@@ -257,13 +289,7 @@
                 document.getElementById('primaryColorInput').value = localStorage.getItem('primaryPrestige');
                 document.getElementById('primaryLightColorInput').value = localStorage.getItem('primaryLightPrestige');
                 document.getElementById('accentColorInput').value = localStorage.getItem('accentPrestige');
-                document.getElementById('cardBgColorInput').value = localStorage.getItem('cardBgPrestige');
-                document.getElementById('catBgColorInput').value = localStorage.getItem('catBgPrestige');
-                document.getElementById('sectionTitleColorInput').value = localStorage.getItem('secTitlePrestige');
-                document.getElementById('catTitleColorInput').value = localStorage.getItem('catTitlePrestige');
-                document.getElementById('textColorInput').value = localStorage.getItem('textPrestige');
-                document.getElementById('fontSizeSelect').value = localStorage.getItem('fontSizePrestige');
-                updateCustomStyles();
+                updateThemeStyles();
             }
             if(localStorage.getItem('themeModePrestige'))changeThemeMode(localStorage.getItem('themeModePrestige'));
             renderPantry();
