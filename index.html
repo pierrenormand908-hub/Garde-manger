@@ -120,10 +120,20 @@
                 <div class="form-group"><div class="theme-toggle-group"><button type="button" id="btnLightMode" class="theme-toggle-btn active" onclick="changeThemeMode('light')">☀️ Clair</button><button type="button" id="btnDarkMode" class="theme-toggle-btn" onclick="changeThemeMode('dark')">🌙 Sombre</button></div></div>
             </div>
             <div class="settings-section">
-                <h4>Personnalisation des couleurs et tailles</h4>
+                <h4>Couleurs principales du thème</h4>
+                <div class="form-group"><label>Couleur principale (Primary) :</label><input type="color" id="primaryColorInput" value="#1b5e20" onchange="updateCustomStyles()"></div>
+                <div class="form-group"><label>Couleur principale claire (Primary-light) :</label><input type="color" id="primaryLightColorInput" value="#2e7d32" onchange="updateCustomStyles()"></div>
+                <div class="form-group"><label>Couleur d'accentuation (Accent) :</label><input type="color" id="accentColorInput" value="#4caf50" onchange="updateCustomStyles()"></div>
+                <div class="color-presets" style="margin-top: 10px;">
+                    <div class="color-dot" style="background:#1b5e20;" onclick="applyThemePreset('#1b5e20','#2e7d32','#4caf50')"></div>
+                    <div class="color-dot" style="background:#0d47a1;" onclick="applyThemePreset('#0d47a1','#1565c0','#2196f3')"></div>
+                    <div class="color-dot" style="background:#b71c1c;" onclick="applyThemePreset('#b71c1c','#c62828','#f44336')"></div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h4>Personnalisation des éléments & tailles</h4>
                 <div class="form-group"><label>Couleur de fond de la section :</label><input type="color" id="cardBgColorInput" value="#ffffff" onchange="updateCustomStyles()"></div>
                 <div class="form-group"><label>Couleur du rectangle gris (catégorie) :</label><input type="color" id="catBgColorInput" value="#f4f7f6" onchange="updateCustomStyles()"></div>
-                <div class="form-group"><label>Couleur de la bordure gauche du rectangle :</label><input type="color" id="accentColorInput" value="#4caf50" onchange="updateCustomStyles()"></div>
                 <div class="form-group"><label>Couleur du titre de la section :</label><input type="color" id="sectionTitleColorInput" value="#1b5e20" onchange="updateCustomStyles()"></div>
                 <div class="form-group"><label>Couleur du nom de la catégorie :</label><input type="color" id="catTitleColorInput" value="#1a202c" onchange="updateCustomStyles()"></div>
                 <div class="form-group"><label>Couleur générale du texte :</label><input type="color" id="textColorInput" value="#1a202c" onchange="updateCustomStyles()"></div>
@@ -190,26 +200,38 @@
             document.getElementById('btnLightMode').classList.toggle('active',m==='light');
             localStorage.setItem('themeModePrestige',m);
         }
+        function applyThemePreset(p,l,a){
+            document.getElementById('primaryColorInput').value = p;
+            document.getElementById('primaryLightColorInput').value = l;
+            document.getElementById('accentColorInput').value = a;
+            updateCustomStyles();
+        }
         function updateCustomStyles(){
+            const primary = document.getElementById('primaryColorInput').value;
+            const primaryLight = document.getElementById('primaryLightColorInput').value;
+            const accent = document.getElementById('accentColorInput').value;
             const cardBg = document.getElementById('cardBgColorInput').value;
             const catBg = document.getElementById('catBgColorInput').value;
-            const accent = document.getElementById('accentColorInput').value;
             const secTitle = document.getElementById('sectionTitleColorInput').value;
             const catTitle = document.getElementById('catTitleColorInput').value;
             const textCol = document.getElementById('textColorInput').value;
             const fontSize = document.getElementById('fontSizeSelect').value;
 
+            document.documentElement.style.setProperty('--primary', primary);
+            document.documentElement.style.setProperty('--primary-light', primaryLight);
+            document.documentElement.style.setProperty('--accent', accent);
             document.documentElement.style.setProperty('--card-bg', cardBg);
             document.documentElement.style.setProperty('--category-bg', catBg);
-            document.documentElement.style.setProperty('--accent', accent);
             document.documentElement.style.setProperty('--section-title-color', secTitle);
             document.documentElement.style.setProperty('--category-title-color', catTitle);
             document.documentElement.style.setProperty('--text', textCol);
             document.documentElement.style.setProperty('--font-size', fontSize);
 
+            localStorage.setItem('primaryPrestige', primary);
+            localStorage.setItem('primaryLightPrestige', primaryLight);
+            localStorage.setItem('accentPrestige', accent);
             localStorage.setItem('cardBgPrestige', cardBg);
             localStorage.setItem('catBgPrestige', catBg);
-            localStorage.setItem('accentPrestige', accent);
             localStorage.setItem('secTitlePrestige', secTitle);
             localStorage.setItem('catTitlePrestige', catTitle);
             localStorage.setItem('textPrestige', textCol);
@@ -219,10 +241,12 @@
         function importData(e){const r=new FileReader();r.onload=function(ev){try{pantryData=JSON.parse(ev.target.result);saveAndRender();alert('Importé !');}catch(err){alert('Erreur JSON');}};r.readAsText(e.target.files[0]);}
         function resetData(){if(confirm('Réinitialiser ?')){pantryData=[];saveAndRender();closeModal('settingsModal');}}
         window.onload=function(){
-            if(localStorage.getItem('cardBgPrestige')) {
+            if(localStorage.getItem('primaryPrestige')) {
+                document.getElementById('primaryColorInput').value = localStorage.getItem('primaryPrestige');
+                document.getElementById('primaryLightColorInput').value = localStorage.getItem('primaryLightPrestige');
+                document.getElementById('accentColorInput').value = localStorage.getItem('accentPrestige');
                 document.getElementById('cardBgColorInput').value = localStorage.getItem('cardBgPrestige');
                 document.getElementById('catBgColorInput').value = localStorage.getItem('catBgPrestige');
-                document.getElementById('accentColorInput').value = localStorage.getItem('accentPrestige');
                 document.getElementById('sectionTitleColorInput').value = localStorage.getItem('secTitlePrestige');
                 document.getElementById('catTitleColorInput').value = localStorage.getItem('catTitlePrestige');
                 document.getElementById('textColorInput').value = localStorage.getItem('textPrestige');
