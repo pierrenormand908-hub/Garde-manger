@@ -542,7 +542,7 @@
             </div>
 
             <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal('addModal')">Annuler</button>
+                <button class="btn btn-secondary" onclick="closeModal('addModal')">Fermer</button>
                 <button class="btn btn-primary" onclick="handleAddItem()">Ajouter</button>
             </div>
         </div>
@@ -619,7 +619,6 @@
     </div>
 
     <script>
-        // Données par défaut avec objets articles (nom + quantité)
         let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [
             {
                 id: 'sec_1',
@@ -638,7 +637,6 @@
             }
         ];
 
-        // Rétrocompatibilité si les anciennes données étaient de simples chaînes de caractères
         pantryData.forEach(sec => {
             sec.categories.forEach(cat => {
                 cat.items = cat.items.map(item => {
@@ -650,7 +648,6 @@
             });
         });
 
-        // --- GESTION MODALS ---
         function openModal(id) {
             document.getElementById(id).style.display = 'flex';
             if(id === 'addModal') {
@@ -660,7 +657,6 @@
         }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- FORMULAIRE DYNAMIQUE ---
         function updateFormFields() {
             const type = document.getElementById('entryType').value;
             document.getElementById('groupSectionField').style.display = type === 'section' ? 'none' : 'block';
@@ -694,7 +690,6 @@
             }
         }
 
-        // --- ACTIONS AJOUT ---
         function handleAddItem() {
             const type = document.getElementById('entryType').value;
             const name = document.getElementById('entryName').value.trim();
@@ -721,7 +716,6 @@
             closeModal('addModal');
         }
 
-        // --- MODIFICATION DES QUANTITÉS ---
         function changeQty(sId, cId, idx, delta) {
             let s = pantryData.find(x => x.id === sId);
             if(s) {
@@ -734,7 +728,6 @@
             }
         }
 
-        // --- SUPPRESSIONS ---
         function deleteSection(id) {
             if(confirm('Supprimer cette section et tout son contenu ?')) {
                 pantryData = pantryData.filter(s => s.id !== id);
@@ -759,7 +752,6 @@
             }
         }
 
-        // --- RENDU VISUEL ---
         function renderPantry() {
             const container = document.getElementById('app-container');
             const search = document.getElementById('searchInput').value.toLowerCase();
@@ -836,7 +828,6 @@
             renderPantry();
         }
 
-        // --- PARAMÈTRES & PERSONNALISATION ---
         function changeThemeMode(mode) {
             const btnLight = document.getElementById('btnLightMode');
             const btnDark = document.getElementById('btnDarkMode');
@@ -893,7 +884,6 @@
             reader.onload = function(e) {
                 try {
                     pantryData = JSON.parse(e.target.result);
-                    // Rétrocompatibilité lors de l'import
                     pantryData.forEach(sec => {
                         sec.categories.forEach(cat => {
                             cat.items = cat.items.map(item => typeof item === 'string' ? { name: item, qty: 1 } : item);
@@ -916,7 +906,6 @@
             }
         }
 
-        // Chargement des préférences mémorisées
         window.onload = function() {
             if(localStorage.getItem('primaryPrestige')) {
                 let col = localStorage.getItem('primaryPrestige');
