@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garde-Manger</title>
+    <title>Mon Garde-Manger</title>
     <link rel="apple-touch-icon" href="Garde-manger.png">
     <style>
         :root {
@@ -28,16 +28,19 @@
             --shadow: 0 4px 20px -2px rgba(0,0,0,0.3);
         }
         *{box-sizing: border-box;}
-        body{font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0 0 90px 0; transition: background 0.3s, color 0.3s;}
+        body{font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0 0 100px 0; transition: background 0.3s, color 0.3s;}
         
         .header-sticky-container{position: sticky; top: 0; z-index: 1000; background-color: var(--bg); transition: background 0.3s;}
         .navbar{background-color: var(--card-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);}
         .nav-brand{display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.3em;}
         .brand-icon{background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;}
-        .nav-controls{display: flex; align-items: center; gap: 12px;}
-        .nav-btn{background: var(--bg); border: 1px solid var(--border); color: var(--text); width: 42px; height: 42px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1em; transition: 0.2s;}
-        .nav-btn.btn-add{background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border: none; font-weight: bold;}
         
+        /* Barre de navigation inférieure */
+        .bottom-nav{position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--card-bg); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; padding: 10px 0; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.05); backdrop-filter: blur(10px);}
+        .bottom-nav-item{display: flex; flex-direction: column; align-items: center; background: none; border: none; color: var(--text); cursor: pointer; font-size: 0.8em; font-weight: 600; gap: 4px; padding: 6px 12px; border-radius: 10px; transition: 0.2s;}
+        .bottom-nav-item:hover{background: var(--bg); color: var(--primary);}
+        .bottom-nav-icon{font-size: 1.5em; line-height: 1;}
+
         .search-container-sticky{padding: 15px 20px 10px 20px; max-width: 1100px; margin: 0 auto;}
         .search-wrapper{position: relative;}
         .search-input{width: 100%; padding: 14px 20px 14px 48px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 1em; background-color: var(--card-bg); color: var(--text); outline: none; box-shadow: var(--shadow);}
@@ -54,7 +57,6 @@
         .item-list{list-style: none; padding: 0; margin: 0;}
         .item-row{display: flex; justify-content: space-between; align-items: center; padding: 6px 4px; border-bottom: 1px dashed var(--border); width: 100%; gap: 8px;}
         .item-left{display: flex; align-items: center; flex: 1; min-width: 0;}
-        
         .item-badge{background: var(--card-bg); color: var(--text); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); width: 100%; min-height: 38px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
         .item-right-controls{display: flex; align-items: center; gap: 8px; flex-shrink: 0;}
@@ -89,20 +91,38 @@
     <div class="header-sticky-container">
         <nav class="navbar">
             <div class="nav-brand"><div class="brand-icon">🍏</div><span>Garde-Manger</span></div>
-            <div class="nav-controls">
-                <button class="nav-btn btn-add" onclick="openModal('addModal')">+</button>
-                <button class="nav-btn" onclick="openModal('settingsModal')">⚙️</button>
-            </div>
         </nav>
-        <div class="search-container-sticky">
+        <div class="search-container-sticky" id="searchBarContainer">
             <div class="search-wrapper"><span class="search-icon">🔍</span><input type="text" id="searchInput" class="search-input" placeholder="Rechercher..." oninput="renderPantry()"></div>
         </div>
     </div>
 
+    <!-- Contenu Principal (Garde Manger ou Produits Canadiens) -->
     <div class="container">
         <div id="app-container"></div>
     </div>
 
+    <!-- Barre de Navigation Inférieure -->
+    <nav class="bottom-nav">
+        <button class="bottom-nav-item" onclick="openModal('addModal')">
+            <span class="bottom-nav-icon">➕</span>
+            <span>Ajouter</span>
+        </button>
+        <button class="bottom-nav-item" onclick="switchView('canadian')">
+            <span class="bottom-nav-icon">🇨🇦</span>
+            <span>Produit canadien</span>
+        </button>
+        <button class="bottom-nav-item" onclick="switchView('pantry')">
+            <span class="bottom-nav-icon">🍏</span>
+            <span>Garde-Manger</span>
+        </button>
+        <button class="bottom-nav-item" onclick="openModal('settingsModal')">
+            <span class="bottom-nav-icon">⚙️</span>
+            <span>Paramètres</span>
+        </button>
+    </nav>
+
+    <!-- Modale Ajout Garde-Manger -->
     <div id="addModal" class="modal">
         <div class="modal-content">
             <h3>✨ Ajouter un élément</h3>
@@ -115,7 +135,17 @@
         </div>
     </div>
 
-    <!-- Fenêtre d'édition de la catégorie (Crayon ✏️) incluant les polices -->
+    <!-- Modale Ajout Produit Canadien (avec son propre +) -->
+    <div id="addCanadianModal" class="modal">
+        <div class="modal-content">
+            <h3>🇨🇦 Ajouter un produit canadien</h3>
+            <div class="form-group"><label>Nom du produit :</label><input type="text" id="canadianProductName" placeholder="Ex: Sirop d'érable..."></div>
+            <div class="form-group"><label>Quantité :</label><input type="number" id="canadianProductQty" value="1" min="1"></div>
+            <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addCanadianModal')">Fermer</button><button class="btn btn-primary" onclick="handle}//"></button><button class="btn btn-primary" onclick="handleAddCanadianItem()">Ajouter</button></div>
+        </div>
+    </div>
+
+    <!-- Fenêtre d'édition de la catégorie (Crayon ✏️) -->
     <div id="editCategoryModal" class="modal">
         <div class="modal-content">
             <h3>✏️ Modifier la catégorie</h3>
@@ -130,7 +160,7 @@
         </div>
     </div>
 
-    <!-- Paramètres généraux (épurés, sans les polices) -->
+    <!-- Paramètres généraux -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <h3>⚙️ Paramètres & Apparence</h3>
@@ -158,15 +188,38 @@
             <div class="modal-actions"><button class="btn btn-primary" onclick="closeModal('settingsModal')">Fermer</button></div>
         </div>
     </div>
+    
     <script>
         let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [{id:'sec_1',name:'Garde Manger',categories:[{id:'cat_1',name:'Sauces',bg:'#f4f7f6',accent:'#4caf50',titleColor:'#1a202c',textColor:'#1a202c',fontFamily:"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",fontSize:"16px",items:[{name:'Nom de l article',qty:1}]}]}];
+        let canadianData = JSON.parse(localStorage.getItem('canadianDataPrestige')) || [];
         
+        let currentView = 'pantry'; // 'pantry' ou 'canadian'
         let currentEditSecId = null;
         let currentEditCatId = null;
 
-        function openModal(id){document.getElementById(id).style.display='flex';if(id==='addModal'){updateFormFields();populateSelectOptions();}}
+        function openModal(id){
+            // Si l'utilisateur clique sur le bouton + de la barre de navigation et qu'il est dans la vue canadien, on ouvre l'ajout canadien
+            if(id === 'addModal' && currentView === 'canadian') {
+                openModal('addCanadianModal');
+                return;
+            }
+            document.getElementById(id).style.display='flex';
+            if(id==='addModal'){updateFormFields();populateSelectOptions();}
+        }
         function closeModal(id){document.getElementById(id).style.display='none';}
         
+        function switchView(view){
+            currentView = view;
+            const searchContainer = document.getElementById('searchBarContainer');
+            if(view === 'canadian') {
+                searchContainer.style.display = 'none';
+                renderCanadian();
+            } else {
+                searchContainer.style.display = 'block';
+                renderPantry();
+            }
+        }
+
         function updateFormFields(){
             const t=document.getElementById('entryType').value;
             document.getElementById('groupSectionField').style.display=t==='section'?'none':'block';
@@ -197,6 +250,33 @@
                 if(s){let c=s.categories.find(x=>x.id===document.getElementById('selectCategory').value);if(c)c.items.push({name:n,qty:parseInt(document.getElementById('entryQty').value)||1});}
             }
             saveAndRender();document.getElementById('entryName').value='';closeModal('addModal');
+        }
+
+        function handleAddCanadianItem(){
+            const n = document.getElementById('canadianProductName').value.trim();
+            if(!n) return alert('Nom requis');
+            const qty = parseInt(document.getElementById('canadianProductQty').value) || 1;
+            canadianData.push({name: n, qty: qty});
+            localStorage.setItem('canadianDataPrestige', JSON.stringify(canadianData));
+            document.getElementById('canadianProductName').value = '';
+            document.getElementById('canadianProductQty').value = '1';
+            closeModal('addCanadianModal');
+            renderCanadian();
+        }
+
+        function changeCanadianQty(idx, delta){
+            canadianData[idx].qty += delta;
+            if(canadianData[idx].qty < 0) canadianData[idx].qty = 0;
+            localStorage.setItem('canadianDataPrestige', JSON.stringify(canadianData));
+            renderCanadian();
+        }
+
+        function deleteCanadianItem(idx){
+            if(confirm('Supprimer ce produit canadien ?')){
+                canadianData.splice(idx, 1);
+                localStorage.setItem('canadianDataPrestige', JSON.stringify(canadianData));
+                renderCanadian();
+            }
         }
         
         function openEditCategoryModal(sId, cId){
@@ -266,6 +346,41 @@
             });
             if(!f)c.innerHTML='<div class="empty-state">Aucun résultat</div>';
         }
+
+        function renderCanadian(){
+            const container = document.getElementById('app-container');
+            container.innerHTML = '';
+            
+            let itemsHtml = '';
+            canadianData.forEach((item, index) => {
+                itemsHtml += `
+                    <li class="item-row">
+                        <div class="item-left"><span class="item-badge" title="${item.name}">${item.name}</span></div>
+                        <div class="item-right-controls">
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="changeCanadianQty(${index}, -1)">-</button>
+                                <span class="qty-value">${item.qty}</span>
+                                <button class="qty-btn" onclick="changeCanadianQty(${index}, 1)">+</button>
+                            </div>
+                            <button class="icon-btn delete" onclick="deleteCanadianItem(${index})">🗑️</button>
+                        </div>
+                    </li>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="section-card">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>🇨🇦 Produits Canadiens</span>
+                        <button class="btn btn-primary" style="padding: 6px 12px; font-size: 0.9em;" onclick="openModal('addCanadianModal')">+ Ajouter</button>
+                    </div>
+                    <ul class="item-list">
+                        ${itemsHtml || '<div class="empty-state">Aucun produit canadien enregistré. Cliquez sur le bouton + pour en ajouter.</div>'}
+                    </ul>
+                </div>
+            `;
+        }
+
         function saveAndRender(){localStorage.setItem('pantryDataPrestige',JSON.stringify(pantryData));renderPantry();}
         function changeThemeMode(m){
             document.documentElement.setAttribute('data-theme',m==='dark'?'dark':'');
@@ -296,7 +411,7 @@
             localStorage.setItem('accentPrestige', accent);
             localStorage.setItem('secTitlePrestige', secTitle);
             
-            renderPantry();
+            if(currentView === 'pantry') renderPantry();
         }
         function exportData(){const d="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(pantryData));const a=document.createElement('a');a.href=d;a.download="garde_manger.json";a.click();a.remove();}
         function importData(e){const r=new FileReader();r.onload=function(ev){try{pantryData=JSON.parse(ev.target.result);saveAndRender();alert('Importé !');}catch(err){alert('Erreur JSON');}};r.readAsText(e.target.files[0]);}
