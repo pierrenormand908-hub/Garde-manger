@@ -60,9 +60,6 @@
         .item-badge{background: var(--card-bg); color: var(--text); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); width: 100%; min-height: 38px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         
         .item-right-controls{display: flex; align-items: center; gap: 8px; flex-shrink: 0;}
-        .qty-control{display: flex; align-items: center; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; height: 38px;}
-        .qty-btn{background: none; border: none; color: var(--text); font-weight: bold; padding: 4px 10px; cursor: pointer; height: 100%;}
-        .qty-value{padding: 0 6px; font-weight: 600; min-width: 24px; text-align: center; color: var(--text);}
         .icon-btn{background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 4px 8px; border-radius: 6px;}
         .icon-btn.delete:hover{background: rgba(229,57,53,0.1); color: #e53935;}
         
@@ -135,12 +132,11 @@
         </div>
     </div>
 
-    <!-- Modale Ajout Produit Canadien -->
+    <!-- Modale Ajout Produit Canadien (Sans quantité) -->
     <div id="addCanadianModal" class="modal">
         <div class="modal-content">
             <h3>🇨🇦 Ajouter un produit canadien</h3>
             <div class="form-group"><label>Nom du produit :</label><input type="text" id="canadianProductName" placeholder="Ex: Sirop d'érable..."></div>
-            <div class="form-group"><label>Quantité :</label><input type="number" id="canadianProductQty" value="1" min="1"></div>
             <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addCanadianModal')">Fermer</button><button class="btn btn-primary" onclick="handleAddCanadianItem()">Ajouter</button></div>
         </div>
     </div>
@@ -254,24 +250,15 @@
         function handleAddCanadianItem(){
             const n = document.getElementById('canadianProductName').value.trim();
             if(!n) return alert('Nom requis');
-            const qty = parseInt(document.getElementById('canadianProductQty').value) || 1;
             
-            canadianData.push({name: n, qty: qty});
+            canadianData.push({name: n});
             
-            // Tri automatique par ordre alphabétique (insensible à la casse)
+            // Tri automatique par ordre alphabétique
             canadianData.sort((a, b) => a.name.localeCompare(b.name, 'fr', {sensitivity: 'base'}));
             
             localStorage.setItem('canadianDataPrestige', JSON.stringify(canadianData));
             document.getElementById('canadianProductName').value = '';
-            document.getElementById('canadianProductQty').value = '1';
             closeModal('addCanadianModal');
-            renderCanadian();
-        }
-
-        function changeCanadianQty(idx, delta){
-            canadianData[idx].qty += delta;
-            if(canadianData[idx].qty < 0) canadianData[idx].qty = 0;
-            localStorage.setItem('canadianDataPrestige', JSON.stringify(canadianData));
             renderCanadian();
         }
 
@@ -355,7 +342,7 @@
             const container = document.getElementById('app-container');
             container.innerHTML = '';
             
-            // S'assure que la liste est bien triée au moment de l'affichage
+            // Tri automatique par ordre alphabétique
             canadianData.sort((a, b) => a.name.localeCompare(b.name, 'fr', {sensitivity: 'base'}));
             
             let itemsHtml = '';
@@ -364,11 +351,6 @@
                     <li class="item-row">
                         <div class="item-left"><span class="item-badge" title="${item.name}">${item.name}</span></div>
                         <div class="item-right-controls">
-                            <div class="qty-control">
-                                <button class="qty-btn" onclick="changeCanadianQty(${index}, -1)">-</button>
-                                <span class="qty-value">${item.qty}</span>
-                                <button class="qty-btn" onclick="changeCanadianQty(${index}, 1)">+</button>
-                            </div>
                             <button class="icon-btn delete" onclick="deleteCanadianItem(${index})">🗑️</button>
                         </div>
                     </li>
