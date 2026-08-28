@@ -49,7 +49,7 @@
         /* En-tête fixe spécifique à la vue Produits Canadiens */
         .canadian-sticky-header {
             position: sticky;
-            top: 73px; /* Juste sous la barre de recherche principale */
+            top: 73px;
             z-index: 990;
             background-color: var(--bg);
             padding: 10px 20px 15px 20px;
@@ -59,12 +59,28 @@
         .canadian-header-card {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 16px 20px;
+            padding: 14px 20px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+        .canadian-title-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .canadian-flag {
+            font-size: 1.4em;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+        .canadian-title-line {
+            font-size: 1.15em;
+            font-weight: 700;
+            color: var(--section-title-color);
+            line-height: 1.2;
         }
 
         .container{max-width: 1100px; margin: 15px auto 30px auto; padding: 0 20px;}
@@ -113,7 +129,7 @@
         <div class="search-container-sticky" id="searchBarContainer">
             <div class="search-wrapper"><span class="search-icon">🔍</span><input type="text" id="searchInput" class="search-input" placeholder="Rechercher..." oninput="renderPantry()"></div>
         </div>
-        <!-- En-tête fixe spécifique aux produits canadiens (affiché uniquement dans cette vue) -->
+        <!-- En-tête fixe spécifique aux produits canadiens -->
         <div id="canadianStickyHeaderContainer" style="display: none;"></div>
     </div>
 
@@ -237,8 +253,12 @@
                 canadianHeaderContainer.innerHTML = `
                     <div class="canadian-sticky-header">
                         <div class="canadian-header-card">
-                            <span style="font-size: 1.25em; font-weight: 700; color: var(--section-title-color);">🇨🇦 Produits Canadiens</span>
-                            <button class="btn btn-primary" style="padding: 6px 14px; font-size: 0.95em;" onclick="openModal('addCanadianModal')">+ Ajouter</button>
+                            <div class="canadian-title-wrapper">
+                                <div class="canadian-flag">🇨🇦</div>
+                                <div class="canadian-title-line">Produit</div>
+                                <div class="canadian-title-line">Canadien</div>
+                            </div>
+                            <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.95em;" onclick="openModal('addCanadianModal')">+ Ajouter</button>
                         </div>
                     </div>
                 `;
