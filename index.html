@@ -71,12 +71,20 @@
             flex-direction: column;
             gap: 2px;
         }
-        .canadian-flag {
-            font-size: 1.4em;
-            line-height: 1;
-            margin-bottom: 2px;
+        .canadian-first-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.15em;
+            font-weight: 700;
+            color: var(--section-title-color);
+            line-height: 1.2;
         }
-        .canadian-title-line {
+        .canadian-flag {
+            font-size: 1.2em;
+            line-height: 1;
+        }
+        .canadian-second-line {
             font-size: 1.15em;
             font-weight: 700;
             color: var(--section-title-color);
@@ -254,9 +262,11 @@
                     <div class="canadian-sticky-header">
                         <div class="canadian-header-card">
                             <div class="canadian-title-wrapper">
-                                <div class="canadian-flag">🇨🇦</div>
-                                <div class="canadian-title-line">Produit</div>
-                                <div class="canadian-title-line">Canadien</div>
+                                <div class="canadian-first-line">
+                                    <span class="canadian-flag">🇨🇦</span>
+                                    <span>Produit</span>
+                                </div>
+                                <div class="canadian-second-line">Canadien</div>
                             </div>
                             <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.95em;" onclick="openModal('addCanadianModal')">+ Ajouter</button>
                         </div>
