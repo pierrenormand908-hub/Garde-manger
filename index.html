@@ -97,7 +97,7 @@
         </div>
     </div>
 
-    <!-- Contenu Principal (Garde Manger ou Produits Canadiens) -->
+    <!-- Contenu Principal -->
     <div class="container">
         <div id="app-container"></div>
     </div>
@@ -135,13 +135,13 @@
         </div>
     </div>
 
-    <!-- Modale Ajout Produit Canadien (avec son propre +) -->
+    <!-- Modale Ajout Produit Canadien -->
     <div id="addCanadianModal" class="modal">
         <div class="modal-content">
             <h3>🇨🇦 Ajouter un produit canadien</h3>
             <div class="form-group"><label>Nom du produit :</label><input type="text" id="canadianProductName" placeholder="Ex: Sirop d'érable..."></div>
             <div class="form-group"><label>Quantité :</label><input type="number" id="canadianProductQty" value="1" min="1"></div>
-            <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addCanadianModal')">Fermer</button><button class="btn btn-primary" onclick="handle}//"></button><button class="btn btn-primary" onclick="handleAddCanadianItem()">Ajouter</button></div>
+            <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('addCanadianModal')">Fermer</button><button class="btn btn-primary" onclick="handleAddCanadianItem()">Ajouter</button></div>
         </div>
     </div>
 
@@ -193,12 +193,11 @@
         let pantryData = JSON.parse(localStorage.getItem('pantryDataPrestige')) || [{id:'sec_1',name:'Garde Manger',categories:[{id:'cat_1',name:'Sauces',bg:'#f4f7f6',accent:'#4caf50',titleColor:'#1a202c',textColor:'#1a202c',fontFamily:"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",fontSize:"16px",items:[{name:'Nom de l article',qty:1}]}]}];
         let canadianData = JSON.parse(localStorage.getItem('canadianDataPrestige')) || [];
         
-        let currentView = 'pantry'; // 'pantry' ou 'canadian'
+        let currentView = 'pantry';
         let currentEditSecId = null;
         let currentEditCatId = null;
 
         function openModal(id){
-            // Si l'utilisateur clique sur le bouton + de la barre de navigation et qu'il est dans la vue canadien, on ouvre l'ajout canadien
             if(id === 'addModal' && currentView === 'canadian') {
                 openModal('addCanadianModal');
                 return;
@@ -256,7 +255,12 @@
             const n = document.getElementById('canadianProductName').value.trim();
             if(!n) return alert('Nom requis');
             const qty = parseInt(document.getElementById('canadianProductQty').value) || 1;
+            
             canadianData.push({name: n, qty: qty});
+            
+            // Tri automatique par ordre alphabétique (insensible à la casse)
+            canadianData.sort((a, b) => a.name.localeCompare(b.name, 'fr', {sensitivity: 'base'}));
+            
             localStorage.setItem('canadianDataPrestige', JSON.stringify(canadianData));
             document.getElementById('canadianProductName').value = '';
             document.getElementById('canadianProductQty').value = '1';
@@ -350,6 +354,9 @@
         function renderCanadian(){
             const container = document.getElementById('app-container');
             container.innerHTML = '';
+            
+            // S'assure que la liste est bien triée au moment de l'affichage
+            canadianData.sort((a, b) => a.name.localeCompare(b.name, 'fr', {sensitivity: 'base'}));
             
             let itemsHtml = '';
             canadianData.forEach((item, index) => {
